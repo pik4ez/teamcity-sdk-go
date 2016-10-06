@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/abourget/teamcity"
+	"github.com/umweltdk/teamcity/teamcity"
 )
 
 func main() {

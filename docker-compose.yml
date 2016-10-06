@@ -1,0 +1,53 @@
+version: '2'
+services:
+  api:
+    build: .
+    command: ./run-test.sh
+  api9:
+    build: .
+    depends_on:
+      - teamcity9
+    links:
+      - teamcity9
+    command: ./run-test.sh -host=teamcity9
+  teamcity9:
+    build: test9
+    ports:
+      - 8111:8111
+    volumes:
+      - ./test9/teamcity:/test-data
+  agent9:
+    image: jetbrains/teamcity-agent:9.1.7
+    depends_on:
+      - teamcity9
+    links:
+      - teamcity9
+    environment:
+      SERVER_URL: http://teamcity9:8111/
+    volumes:
+      - ./test9/agent:/data/teamcity_agent/conf
+      - /var/run/docker.sock:/var/run/docker.sock
+  api10:
+    build: .
+    depends_on:
+      - teamcity10
+    links:
+      - teamcity10
+    command: ./run-test.sh -host=teamcity10
+  teamcity10:
+    build: test10
+    ports:
+      - 8112:8111
+    volumes:
+      - ./test10/teamcity:/test-data
+  agent10:
+    image: jetbrains/teamcity-agent:10.0.2
+    depends_on:
+      - teamcity10
+    links:
+      - teamcity10
+    environment:
+      SERVER_URL: http://teamcity10:8111/
+    volumes:
+      - ./test10/agent:/data/teamcity_agent/conf
+      - /var/run/docker.sock:/var/run/docker.sock

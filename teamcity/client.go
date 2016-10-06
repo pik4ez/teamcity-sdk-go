@@ -1,0 +1,321 @@
+package teamcity
+
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/umweltdk/teamcity/types"
+	"io"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strings"
+	"time"
+)
+
+// Client to access a TeamCity API
+type Client struct {
+	HTTPClient *http.Client
+	username   string
+	password   string
+	host       string
+	retries    int
+}
+
+func New(host, username, password string) *Client {
+	return &Client{
+		HTTPClient: http.DefaultClient,
+		username:   username,
+		password:   password,
+		host:       host,
+		retries:    8,
+	}
+}
+
+func (c *Client) Server() (*types.Server, error) {
+	var server *types.Server
+	err := c.doRequest("GET", "/httpAuth/app/rest/server", nil, &server)
+	return server, err
+}
+
+func (c *Client) QueueBuild(buildTypeID string, branchName string, properties types.Properties) (*types.Build, error) {
+	jsonQuery := struct {
+		BuildTypeID string `json:"buildTypeId,omitempty"`
+		Properties  types.Properties `json:"properties"`
+		BranchName string `json:"branchName,omitempty"`
+	}{}
+	jsonQuery.BuildTypeID = buildTypeID
+	if branchName != "" {
+		jsonQuery.BranchName = fmt.Sprintf("refs/heads/%s", branchName)
+	}
+	jsonQuery.Properties = properties
+
+	build := &types.Build{}
+
+	err := withRetry(c.retries, func() error {
+		return c.doRequest("POST", "/httpAuth/app/rest/buildQueue", jsonQuery, &build)
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return build, nil
+}
+
+func (c *Client) SearchBuild(locator string) ([]*types.Build, error) {
+	path := fmt.Sprintf("/httpAuth/app/rest/builds/?locator=%s&fields=count,build(*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*)))", locator)
+
+	respStruct := struct {
+		Count int
+		Build []*types.Build
+	}{}
+	err := withRetry(c.retries, func() error {
+		return c.doRequest("GET", path, nil, &respStruct)
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return respStruct.Build, nil
+}
+
+func (c *Client) GetBuild(buildID string) (*types.Build, error) {
+	path := fmt.Sprintf("/httpAuth/app/rest/builds/id:%s?fields=*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*))", buildID)
+	var build *types.Build
+
+	err := withRetry(c.retries, func() error {
+		return c.doRequest("GET", path, nil, &build)
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if build == nil {
+		return nil, errors.New("build not found")
+	}
+
+	return build, nil
+}
+
+func (c *Client) GetBuildID(buildTypeID, branchName, buildNumber string) (string, error) {
+	type builds struct {
+		Count    int
+		Href     string
+		NextHref string
+		Build    []types.Build
+	}
+
+	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/builds?locator=branch:%s,number:%s,count:1", buildTypeID, branchName, buildNumber)
+
+	var build *builds
+	err := withRetry(c.retries, func() error {
+		return c.doRequest("GET", path, nil, &build)
+	})
+	if err != nil {
+		return "ID not found", err
+	}
+
+	if build == nil {
+		return "ID not found", errors.New("build not found")
+	}
+
+	return fmt.Sprintf("%d", build.Build[0].ID), nil
+}
+
+func (c *Client) GetBuildProperties(buildID string) (types.Properties, error) {
+	path := fmt.Sprintf("/httpAuth/app/rest/builds/id:%s/resulting-properties", buildID)
+
+	var response types.Properties
+
+	err := withRetry(c.retries, func() error {
+		return c.doRequest("GET", path, nil, &response)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (c *Client) GetChanges(path string) ([]types.Change, error) {
+	var changes struct {
+		Change []types.Change
+	}
+
+	path += ",count:99999"
+	err := c.doRequest("GET", path, nil, &changes)
+	if err != nil {
+		return nil, err
+	}
+
+	if changes.Change == nil {
+		return nil, errors.New("changes not found")
+	}
+
+	return changes.Change, nil
+}
+
+func (c *Client) GetProblems(path string, count int64) ([]types.ProblemOccurrence, error) {
+	var problems struct {
+		Count             int64
+		Default           bool
+		ProblemOccurrence []types.ProblemOccurrence
+	}
+
+	path += fmt.Sprintf(",count:%v&fields=*,problemOccurrence(*,details)", count)
+	err := c.doRequest("GET", path, nil, &problems)
+	if err != nil {
+		return nil, err
+	}
+
+	if problems.ProblemOccurrence == nil {
+		return nil, errors.New("problemOccurrence list not found")
+	}
+
+	return problems.ProblemOccurrence, nil
+}
+
+func (c *Client) GetTests(path string, count int64, failingOnly bool, ignoreMuted bool) ([]types.TestOccurrence, error) {
+	var tests struct {
+		Count          int64
+		HREF           string
+		TestOccurrence []types.TestOccurrence
+	}
+
+	if ignoreMuted {
+		path += ",currentlyMuted:false"
+	}
+	if failingOnly {
+		path += ",status:FAILURE"
+	}
+	path += fmt.Sprintf(",count:%v", count)
+	err := c.doRequest("GET", path, nil, &tests)
+	if err != nil {
+		return nil, err
+	}
+
+	return tests.TestOccurrence, nil
+}
+
+func (c *Client) CancelBuild(buildID int64, comment string) error {
+	body := map[string]interface{}{
+		"buildCancelRequest": map[string]interface{}{
+			"comment":       comment,
+			"readIntoQueue": true,
+		},
+	}
+	return c.doRequest("POST", fmt.Sprintf("/httpAuth/app/rest/id:%d", buildID), body, nil)
+}
+
+func (c *Client) GetBuildLog(buildID string) (string, error) {
+	cnt, err := c.doNotJSONRequest("GET", fmt.Sprintf("/httpAuth/downloadBuildLog.html?buildId=%s", buildID), nil)
+	buf := bytes.NewBuffer(cnt)
+	return buf.String(), err
+}
+
+func (c *Client) doRetryRequest(method string, path string, data interface{}, v interface{}) error {
+	var err error
+	if c.retries > 1 {
+		err = withRetry(c.retries, func() error {
+			return c.doRequest(method, path, data, v)
+		})
+	} else {
+		err = c.doRequest(method, path, data, v)
+	}
+	return err
+}
+
+func (c *Client) doRequest(method string, path string, data interface{}, v interface{}) error {
+	jsonCnt, err := c.doNotJSONRequest(method, path, data)
+	if err != nil {
+		return err
+	}
+	if jsonCnt == nil {
+		return nil
+	}
+
+	ioutil.WriteFile(fmt.Sprintf("/tmp/mama-%s.json", time.Now().Format("15h04m05.000")), jsonCnt, 0644)
+	//fmt.Printf("Do response %s\n", string(jsonCnt))
+
+	if v != nil {
+		err = json.Unmarshal(jsonCnt, &v)
+		if err != nil {
+			return fmt.Errorf("json unmarshal: %s (%q)", err, truncate(string(jsonCnt), 1000))
+		}
+	}
+
+	return nil
+}
+
+func (c *Client) doNotJSONRequest(method string, path string, data interface{}) ([]byte, error) {
+	//Perform some validation on host. Allow them to specify http vs https
+	//if desired and remove trailing slash if present
+	host := c.host
+	if strings.HasSuffix(host, "/") {
+		host = strings.TrimSuffix(host, "/")
+	}
+	prefix := "https://"
+	if strings.HasPrefix(strings.ToLower(host), "http") {
+		prefix = ""
+	}
+	authURL := fmt.Sprintf("%s%s%s", prefix, host, path)
+
+	fmt.Printf("Sending request to %s\n", authURL)
+
+	var body io.Reader
+	if data != nil {
+		jsonReq, err := json.Marshal(data)
+		if err != nil {
+			return nil, fmt.Errorf("marshaling data: %s", err)
+		}
+
+		body = bytes.NewBuffer(jsonReq)
+	}
+
+	req, _ := http.NewRequest(method, authURL, body)
+	req.SetBasicAuth(c.username, c.password)
+	req.Header.Add("Accept", "application/json")
+
+	if body != nil {
+		req.Header.Add("Content-Type", "application/json")
+	}
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 404 {
+		return nil, nil
+	}
+
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode >= 400 && resp.Header["Content-Type"][0] == "text/plain" {
+		return nil, errors.New(string(respBody))
+	}
+
+	return respBody, err
+}
+
+func truncate(s string, l int) string {
+	if len(s) > l {
+		return s[:l]
+	}
+	return s
+}
+
+func withRetry(retries int, f func() error) (err error) {
+	for i := 0; i < retries; i++ {
+		err = f()
+		if err != nil {
+			log.Printf("Retry: %v / %v, error: %v\n", i, retries, err)
+		} else {
+			return
+		}
+	}
+	return
+}

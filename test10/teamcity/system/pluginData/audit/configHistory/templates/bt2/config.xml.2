@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="d16f0b6b-663d-48ec-9644-4c367e554d98" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
+  <name>Muh</name>
+  <settings>
+    <parameters />
+    <build-runners>
+      <runner id="RUNNER_2" name="Echo chamber" type="simpleRunner">
+        <parameters>
+          <param name="script.content" value="echo &quot;Chamber&quot;" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="use.custom.script" value="true" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings />
+    <requirements />
+    <build-triggers />
+    <cleanup />
+  </settings>
+</template>
+

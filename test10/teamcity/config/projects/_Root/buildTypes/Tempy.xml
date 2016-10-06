@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="7df14fc9-7cc0-4925-9e26-cee9cfb22b99" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/10.0/project-config.xsd">
+  <name>Tempy</name>
+  <settings>
+    <options>
+      <option name="checkoutMode" value="ON_SERVER" />
+    </options>
+    <parameters />
+    <build-runners>
+      <runner id="RUNNER_3" name="Env" type="simpleRunner">
+        <parameters>
+          <param name="script.content" value="env" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="use.custom.script" value="true" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings />
+    <requirements />
+    <build-triggers>
+      <build-trigger id="TRIGGER_1" type="schedulingTrigger">
+        <parameters>
+          <param name="dayOfWeek" value="Sunday" />
+          <param name="hour" value="0" />
+          <param name="minute" value="0" />
+          <param name="revisionRule" value="lastFinished" />
+          <param name="schedulingPolicy" value="weekly" />
+          <param name="timezone" value="SERVER" />
+        </parameters>
+      </build-trigger>
+    </build-triggers>
+    <cleanup />
+  </settings>
+</template>
+

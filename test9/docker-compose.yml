@@ -1,0 +1,19 @@
+version: '2'
+services:
+  teamcity9:
+    image: jetbrains/teamcity-server:9.1.7
+    ports:
+      - 8111:8111
+    volumes:
+      - ./teamcity:/data/teamcity_server/datadir
+  agent9:
+    image: jetbrains/teamcity-agent:9.1.7
+    depends_on:
+      - teamcity9
+    links:
+      - teamcity9
+    environment:
+      SERVER_URL: http://teamcity9:8111/
+    volumes:
+      - ./agent:/data/teamcity_agent/conf
+      - /var/run/docker.sock:/var/run/docker.sock

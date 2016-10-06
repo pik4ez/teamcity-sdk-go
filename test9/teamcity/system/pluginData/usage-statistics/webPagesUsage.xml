@@ -1,0 +1,38 @@
+<root>
+  <page path="/">
+    <usage userId="1" timestamp="1475155600158" />
+  </page>
+  <page path="/admin/createTemplate.html">
+    <usage userId="1" timestamp="1475174729747" />
+  </page>
+  <page path="/admin/editBuild.html">
+    <usage userId="1" timestamp="1475174739187" />
+  </page>
+  <page path="/admin/editBuildRunners.html">
+    <usage userId="1" timestamp="1475174888966" />
+  </page>
+  <page path="/admin/editProject.html">
+    <usage userId="1" timestamp="1475174727107" />
+  </page>
+  <page path="/admin/editProject.html?tab=projectParams">
+    <usage userId="1" timestamp="1475459938043" />
+  </page>
+  <page path="/admin/editRunType.html">
+    <usage userId="1" timestamp="1475174836131" />
+  </page>
+  <page path="/admin/editTriggers.html">
+    <usage userId="1" timestamp="1475174826112" />
+  </page>
+  <page path="/parameters/editParameter.html">
+    <usage userId="1" timestamp="1475459931682" />
+  </page>
+  <page path="/project.html?tab=projectOverview">
+    <usage userId="1" timestamp="1475155613343" />
+  </page>
+  <page path="/viewType.html">
+    <usage userId="1" timestamp="1475103425507" />
+  </page>
+  <page path="/visibleProjects.html">
+    <usage userId="1" timestamp="1475116507792" />
+  </page>
+</root>
