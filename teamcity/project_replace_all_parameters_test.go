@@ -16,21 +16,21 @@ func TestClientReplaceAllProjectParameters(t *testing.T) {
     Name: "TestClientReplaceAllProjectParameters",
   })
   require.NoError(t, err, "Expected no error")
-  err = client.ReplaceAllProjectParameters("TestClientReplaceAllProjectParameters", &types.Properties{
-    "env.MUH": types.Property{
+  err = client.ReplaceAllProjectParameters("TestClientReplaceAllProjectParameters", &types.Parameters{
+    "env.MUH": types.Parameter{
       Value: "Hello",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Type: types.PasswordType{},
       },
     },
   })
   require.NoError(t, err, "Expected no error")
 
-  parameters := types.Properties{
-    "env.HELLO": types.Property{"Good job", nil},
-    "aws.hush": types.Property{
+  parameters := types.Parameters{
+    "env.HELLO": types.Parameter{"Good job", nil},
+    "aws.hush": types.Parameter{
       Value: "Bad Job",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Type: types.PasswordType{},
       },
     },
@@ -39,11 +39,11 @@ func TestClientReplaceAllProjectParameters(t *testing.T) {
   require.NoError(t, err, "Expected no error")
   require.NotNil(t, parameters, "Update to return parameters")
 
-  expected := types.Properties{
-    "env.HELLO": types.Property{"Good job", nil},
-    "aws.hush": types.Property{
+  expected := types.Parameters{
+    "env.HELLO": types.Parameter{"Good job", nil},
+    "aws.hush": types.Parameter{
       Value: "",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Type: types.PasswordType{},
       },
     },
@@ -65,23 +65,23 @@ func TestClientReplaceProjectParametersInherited(t *testing.T) {
     Name:            "Empty3",
   })
   require.NoError(t, err, "Expected no error")
-  err = client.ReplaceAllProjectParameters("Empty3", &types.Properties{
-    "env.MUH": types.Property{
+  err = client.ReplaceAllProjectParameters("Empty3", &types.Parameters{
+    "env.MUH": types.Parameter{
       Value: "Hush",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Muh value",
         Description: "The Muh value that does all the Muhing",
         Type: types.PasswordType{},
       },
     },
-    "env.AWW": types.Property{
+    "env.AWW": types.Parameter{
       Value: "Parent",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "AWW",
         Type: types.TextType{"any"},
       },
     },
-    "env.DAMM": types.Property{
+    "env.DAMM": types.Parameter{
       Value: "Parent",
     },
   })
@@ -93,54 +93,54 @@ func TestClientReplaceProjectParametersInherited(t *testing.T) {
     Name: "TestClientReplaceProjectParametersInherited",
   })
   require.NoError(t, err, "Expected no error")
-  err = client.ReplaceAllProjectParameters("Empty3_TestClientReplaceProjectParametersInherited", &types.Properties{
-    "config.remove": types.Property{
+  err = client.ReplaceAllProjectParameters("Empty3_TestClientReplaceProjectParametersInherited", &types.Parameters{
+    "config.remove": types.Parameter{
       Value: "Hello",
     },
-    "config.replace": types.Property{
+    "config.replace": types.Parameter{
       Value: "Dink",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Buhhhhh",
         Type: types.TextType{"any"},
       },
     },
-    "env.AWW": types.Property{
+    "env.AWW": types.Parameter{
       Value: "BuildConf",
     },
-    "env.DAMM": types.Property{
+    "env.DAMM": types.Parameter{
       Value: "BuildConf",
     },
   })
   require.NoError(t, err, "Expected no error")
 
-  parameters := types.Properties{
-    "env.HELLO": types.Property{"Good job", nil},
-    "config.replace": types.Property{
+  parameters := types.Parameters{
+    "env.HELLO": types.Parameter{"Good job", nil},
+    "config.replace": types.Parameter{
       Value: "Mink",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Minker",
         Type: types.CheckboxType{
           Checked: "Flunk",
         },
       },
     },
-    "aws.hush": types.Property{
+    "aws.hush": types.Parameter{
       Value: "Bad Job",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Type: types.PasswordType{},
       },
     },
-    "env.AWW": types.Property{
+    "env.AWW": types.Parameter{
       Value: "",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Type: types.CheckboxType{
           Checked: "BuildCD",
         },
       },
     },
-    "env.MUH": types.Property{
+    "env.MUH": types.Parameter{
       Value: "Hello",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Plunk",
         Type: types.PasswordType{},
       },
@@ -150,39 +150,39 @@ func TestClientReplaceProjectParametersInherited(t *testing.T) {
   require.NoError(t, err, "Expected no error")
   require.NotNil(t, parameters, "Update to return parameters")
 
-  expected := types.Properties{
-    "env.HELLO": types.Property{"Good job", nil},
-    "config.replace": types.Property{
+  expected := types.Parameters{
+    "env.HELLO": types.Parameter{"Good job", nil},
+    "config.replace": types.Parameter{
       Value: "Mink",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Minker",
         Type: types.CheckboxType{
           Checked: "Flunk",
         },
       },
     },
-    "aws.hush": types.Property{
+    "aws.hush": types.Parameter{
       Value: "",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Type: types.PasswordType{},
       },
     },
-    "env.AWW": types.Property{
+    "env.AWW": types.Parameter{
       Value: "",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "AWW",
         Type: types.TextType{"any"},
       },
     },
-    "env.MUH": types.Property{
+    "env.MUH": types.Parameter{
       Value: "",
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Muh value",
         Description: "The Muh value that does all the Muhing",
         Type: types.PasswordType{},
       },
     },
-    "env.DAMM": types.Property{
+    "env.DAMM": types.Parameter{
       Value: "Parent",
     },
   }

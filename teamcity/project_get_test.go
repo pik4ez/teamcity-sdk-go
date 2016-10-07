@@ -15,10 +15,10 @@ func TestClientGetProject(t *testing.T) {
   require.NoError(t, err, "Expected no error")
   require.NotNil(t, config, "Create to return config")
 
-  assert.Equal(t, types.Properties{
-    "env.MUH": types.Property{
+  assert.Equal(t, types.Parameters{
+    "env.MUH": types.Parameter{
       Value: client.VersionParameterValue(t, "env.MUH"),
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Muh value",
         Description: "The Muh value that does all the Muhing",
         Type: types.PasswordType{},

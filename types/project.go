@@ -13,7 +13,7 @@ type Project struct {
 	ParentProjectID     ProjectId           `json:"parentProject,omitempty"`
 	BuildConfigurations BuildConfigurations `json:"buildTypes,omitempty"`
 	Templates           BuildConfigurations `json:"templates,omitempty"`
-	Parameters          Properties          `json:"parameters,omitempty"`
+	Parameters          Parameters          `json:"parameters,omitempty"`
 	Projects            Projects            `json:"projects,omitempty"`
 }
 

@@ -38,10 +38,10 @@ func TestClientCreateProjectMinimal(t *testing.T) {
   require.NotNil(t, project, "Create to return project")
 
   assert.Equal(t, "Empty_Hello", project.ID, "Expected create to return ID")
-  assert.Equal(t, types.Properties{
-    "env.MUH": types.Property{
+  assert.Equal(t, types.Parameters{
+    "env.MUH": types.Parameter{
       Value: client.VersionParameterValue(t, "env.MUH"),
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Muh value",
         Description: "The Muh value that does all the Muhing",
         Display: types.Normal,
@@ -61,8 +61,8 @@ func TestClientCreateProjectIgnoresParameters(t *testing.T) {
   project := &types.Project{
     ParentProjectID: "Empty",
     Name:            "Full",
-    Parameters: types.Properties{
-      "env.AWW": types.Property {
+    Parameters: types.Parameters{
+      "env.AWW": types.Parameter {
         Value: "Parent",
       },
     },
@@ -72,10 +72,10 @@ func TestClientCreateProjectIgnoresParameters(t *testing.T) {
   require.NotNil(t, project, "Create to return project")
 
   assert.Equal(t, "Empty_Full", project.ID, "Expected create to return ID")
-  assert.Equal(t, types.Properties{
-    "env.MUH": types.Property{
+  assert.Equal(t, types.Parameters{
+    "env.MUH": types.Parameter{
       Value: client.VersionParameterValue(t, "env.MUH"),
-      Spec: &types.PropertySpec{
+      Spec: &types.ParameterSpec{
         Label: "Muh value",
         Description: "The Muh value that does all the Muhing",
         Display: types.Normal,

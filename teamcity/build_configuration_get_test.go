@@ -14,8 +14,8 @@ func TestClientGetBuildConfigurationMock(t *testing.T) {
 	require.NoError(t, err, "Expected no error")
 	require.NotNil(t, config, "Create to return config")
 
-	assert.Equal(t, types.Properties{
-		"build.counter": types.Property{"12", nil},
+	assert.Equal(t, types.Parameters{
+		"build.counter": types.Parameter{"12", nil},
 	}, config.Parameters, "Parameters")
 }
 
@@ -154,9 +154,9 @@ func TestClientGetBuildConfigurationMock1(t *testing.T) {
 			Name: "Echo",
 			Type: "simpleRunner",
 			Properties: types.Properties{
-				"script.content":     types.Property{"env", nil},
-				"teamcity.step.mode": types.Property{"default", nil},
-				"use.custom.script":  types.Property{"true", nil},
+				"script.content":     "env",
+				"teamcity.step.mode": "default",
+				"use.custom.script":  "true",
 			},
 		},
 	}, config.Steps, "Build steps")
@@ -176,9 +176,9 @@ func TestClientGetBuildConfiguration(t *testing.T) {
 			Name: "Echo",
 			Type: "simpleRunner",
 			Properties: types.Properties{
-				"script.content":     types.Property{"env", nil},
-				"teamcity.step.mode": types.Property{"default", nil},
-				"use.custom.script":  types.Property{"true", nil},
+				"script.content":     "env",
+				"teamcity.step.mode": "default",
+				"use.custom.script":  "true",
 			},
 		},
 	}, config.Steps, "Build steps")

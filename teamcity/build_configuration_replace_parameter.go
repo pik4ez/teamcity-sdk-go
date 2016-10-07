@@ -6,9 +6,9 @@ import (
   "github.com/umweltdk/teamcity/types"
 )
 
-func (c *Client) ReplaceBuildConfigurationParameter(buildConfID,name string, parameter *types.Property) error {
+func (c *Client) ReplaceBuildConfigurationParameter(buildConfID,name string, parameter *types.Parameter) error {
   path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/parameters/%s", buildConfID, name)
-  var parameterReturn *types.Property
+  var parameterReturn *types.Parameter
 
   err := c.doRetryRequest("PUT", path, parameter, &parameterReturn)
   if err != nil {

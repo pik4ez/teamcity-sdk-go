@@ -95,18 +95,18 @@ func TestClientCreateBuildConfigurationTemplateFull(t *testing.T) {
 				Name: "Muh",
 				Type: "simpleRunner",
 				Properties: types.Properties{
-					"script.content":     types.Property{"env", nil},
-					"teamcity.step.mode": types.Property{"default", nil},
-					"use.custom.script":  types.Property{"true", nil},
+					"script.content":     "env",
+					"teamcity.step.mode": "default",
+					"use.custom.script":  "true",
 				},
 			},
 			types.BuildStep{
 				Name: "Env",
 				Type: "simpleRunner",
 				Properties: types.Properties{
-					"script.content":     types.Property{"env", nil},
-					"teamcity.step.mode": types.Property{"default", nil},
-					"use.custom.script":  types.Property{"true", nil},
+					"script.content":     "env",
+					"teamcity.step.mode": "default",
+					"use.custom.script":  "true",
 				},
 			},
 		},
@@ -129,9 +129,9 @@ func TestClientCreateBuildConfigurationTemplateFull(t *testing.T) {
 			Name: "Env",
 			Type: "simpleRunner",
 			Properties: types.Properties{
-				"script.content":     types.Property{"env", nil},
-				"teamcity.step.mode": types.Property{"default", nil},
-				"use.custom.script":  types.Property{"true", nil},
+				"script.content":     "env",
+				"teamcity.step.mode": "default",
+				"use.custom.script":  "true",
 			},
 		},
 		types.BuildStep{
@@ -139,9 +139,9 @@ func TestClientCreateBuildConfigurationTemplateFull(t *testing.T) {
 			Name: "Muh",
 			Type: "simpleRunner",
 			Properties: types.Properties{
-				"script.content":     types.Property{"env", nil},
-				"teamcity.step.mode": types.Property{"default", nil},
-				"use.custom.script":  types.Property{"true", nil},
+				"script.content":     "env",
+				"teamcity.step.mode": "default",
+				"use.custom.script":  "true",
 			},
 		},
 		types.BuildStep{
@@ -149,9 +149,9 @@ func TestClientCreateBuildConfigurationTemplateFull(t *testing.T) {
 			Name: "Env (1)",
 			Type: "simpleRunner",
 			Properties: types.Properties{
-				"script.content":     types.Property{"env", nil},
-				"teamcity.step.mode": types.Property{"default", nil},
-				"use.custom.script":  types.Property{"true", nil},
+				"script.content":     "env",
+				"teamcity.step.mode": "default",
+				"use.custom.script":  "true",
 			},
 		},
 	}, config.Steps, "Build steps")
@@ -176,9 +176,9 @@ func TestClientCreateBuildConfigurationTemplateReorder(t *testing.T) {
 				Name: "Muh",
 				Type: "simpleRunner",
 				Properties: types.Properties{
-					"script.content":     types.Property{"env", nil},
-					"teamcity.step.mode": types.Property{"default", nil},
-					"use.custom.script":  types.Property{"true", nil},
+					"script.content":     "env",
+					"teamcity.step.mode": "default",
+					"use.custom.script":  "true",
 				},
 			},
 			types.BuildStep{
@@ -186,9 +186,9 @@ func TestClientCreateBuildConfigurationTemplateReorder(t *testing.T) {
 				Name: "Env",
 				Type: "simpleRunner",
 				Properties: types.Properties{
-					"script.content":     types.Property{"env", nil},
-					"teamcity.step.mode": types.Property{"default", nil},
-					"use.custom.script":  types.Property{"true", nil},
+					"script.content":     "env",
+					"teamcity.step.mode": "default",
+					"use.custom.script":  "true",
 				},
 			},
 		},
@@ -209,9 +209,9 @@ func TestClientCreateBuildConfigurationTemplateReorder(t *testing.T) {
 			Name: "Muh",
 			Type: "simpleRunner",
 			Properties: types.Properties{
-				"script.content":     types.Property{"env", nil},
-				"teamcity.step.mode": types.Property{"default", nil},
-				"use.custom.script":  types.Property{"true", nil},
+				"script.content":     "env",
+				"teamcity.step.mode": "default",
+				"use.custom.script":  "true",
 			},
 		},
 		types.BuildStep{
@@ -219,9 +219,9 @@ func TestClientCreateBuildConfigurationTemplateReorder(t *testing.T) {
 			Name: "Env",
 			Type: "simpleRunner",
 			Properties: types.Properties{
-				"script.content":     types.Property{"env", nil},
-				"teamcity.step.mode": types.Property{"default", nil},
-				"use.custom.script":  types.Property{"true", nil},
+				"script.content":     "env",
+				"teamcity.step.mode": "default",
+				"use.custom.script":  "true",
 			},
 		},
 	}, config.Steps, "Build steps")
@@ -242,9 +242,9 @@ func TestClientCreateBuildConfigurationFull(t *testing.T) {
 				Name: "Muh",
 				Type: "simpleRunner",
 				Properties: types.Properties{
-					"script.content":     types.Property{"env", nil},
-					"teamcity.step.mode": types.Property{"default", nil},
-					"use.custom.script":  types.Property{"true", nil},
+					"script.content":     "env",
+					"teamcity.step.mode": "default",
+					"use.custom.script":  "true",
 				},
 			},
 		},
@@ -264,9 +264,9 @@ func TestClientCreateBuildConfigurationFull(t *testing.T) {
 			Name: "Muh",
 			Type: "simpleRunner",
 			Properties: types.Properties{
-				"script.content":     types.Property{"env", nil},
-				"teamcity.step.mode": types.Property{"default", nil},
-				"use.custom.script":  types.Property{"true", nil},
+				"script.content":     "env",
+				"teamcity.step.mode": "default",
+				"use.custom.script":  "true",
 			},
 		},
 	}, config.Steps, "Build steps")

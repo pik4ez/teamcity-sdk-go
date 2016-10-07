@@ -12,7 +12,7 @@ type BuildConfiguration struct {
 	Name           string         `json:"name"`
 	Description    string         `json:"description,omitempty"`
 	Settings       Properties     `json:"settings,omitempty"`
-	Parameters     Properties     `json:"parameters,omitempty"`
+	Parameters     Parameters     `json:"parameters,omitempty"`
 	Steps          BuildSteps     `json:"steps,omitempty"`
 	VcsRootEntries VcsRootEntries `json:"vcs-root-entries,omitempty"`
 	//Features []Feature

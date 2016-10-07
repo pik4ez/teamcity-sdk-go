@@ -6,9 +6,9 @@ import (
   "github.com/umweltdk/teamcity/types"
 )
 
-func (c *Client) ReplaceAllProjectParameters(projectID string, parameters *types.Properties) error {
+func (c *Client) ReplaceAllProjectParameters(projectID string, parameters *types.Parameters) error {
   path := fmt.Sprintf("/httpAuth/app/rest/projects/id:%s/parameters", projectID)
-  var parametersReturn *types.Properties
+  var parametersReturn *types.Parameters
 
   err := c.doRetryRequest("PUT", path, parameters, &parametersReturn)
   if err != nil {
