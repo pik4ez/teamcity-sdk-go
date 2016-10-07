@@ -261,7 +261,7 @@ func (c *Client) doNotJSONRequest(method string, path string, data interface{}) 
 	}
 	authURL := fmt.Sprintf("%s%s%s", prefix, host, path)
 
-	fmt.Printf("Sending request to %s\n", authURL)
+	fmt.Printf("%s %s\n", method, authURL)
 
 	var body io.Reader
 	if data != nil {
