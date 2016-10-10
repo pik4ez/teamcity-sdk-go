@@ -74,6 +74,16 @@ func TestClientReplaceProjectParametersInherited(t *testing.T) {
         Type: types.PasswordType{},
       },
     },
+    "config.inherited": types.Parameter{
+      Value: "Parent",
+      Spec: &types.ParameterSpec{
+        Label: "AWW",
+        Type: types.CheckboxType{"Hello", "Copperhead"},
+      },
+    },
+    "config.inherited2": types.Parameter{
+      Value: "Parent",
+    },
     "env.AWW": types.Parameter{
       Value: "Parent",
       Spec: &types.ParameterSpec{
@@ -104,6 +114,16 @@ func TestClientReplaceProjectParametersInherited(t *testing.T) {
         Type: types.TextType{"any"},
       },
     },
+    "config.inherited": types.Parameter{
+      Value: "Dink",
+      Spec: &types.ParameterSpec{
+        Label: "Buhhhhh",
+        Type: types.TextType{"any"},
+      },
+    },
+    "config.inherited2": types.Parameter{
+      Value: "Dink",
+    },
     "env.AWW": types.Parameter{
       Value: "BuildConf",
     },
@@ -122,6 +142,20 @@ func TestClientReplaceProjectParametersInherited(t *testing.T) {
         Type: types.CheckboxType{
           Checked: "Flunk",
         },
+      },
+    },
+    "config.inherited": types.Parameter{
+      Value: "Dink",
+      Spec: &types.ParameterSpec{
+        Label: "Buhhhhh",
+        Type: types.TextType{"any"},
+      },
+    },
+    "config.inherited2": types.Parameter{
+      Value: "Dink",
+      Spec: &types.ParameterSpec{
+        Label: "Buhhhhh",
+        Type: types.TextType{"any"},
       },
     },
     "aws.hush": types.Parameter{
@@ -159,6 +193,20 @@ func TestClientReplaceProjectParametersInherited(t *testing.T) {
         Type: types.CheckboxType{
           Checked: "Flunk",
         },
+      },
+    },
+    "config.inherited": types.Parameter{
+      Value: "Dink",
+      Spec: &types.ParameterSpec{
+        Label: "AWW",
+        Type: types.CheckboxType{"Hello", "Copperhead"},
+      },
+    },
+    "config.inherited2": types.Parameter{
+      Value: "Dink",
+      Spec: &types.ParameterSpec{
+        Label: "Buhhhhh",
+        Type: types.TextType{"any"},
       },
     },
     "aws.hush": types.Parameter{

@@ -236,7 +236,7 @@ func (c *Client) doRequest(method string, path string, data interface{}, v inter
 	}
 
 	ioutil.WriteFile(fmt.Sprintf("/tmp/mama-%s.json", time.Now().Format("15h04m05.000")), jsonCnt, 0644)
-	//fmt.Printf("Do response %s\n", string(jsonCnt))
+	//log.Printf("Do response %s\n", string(jsonCnt))
 
 	if v != nil {
 		err = json.Unmarshal(jsonCnt, &v)
@@ -261,6 +261,7 @@ func (c *Client) doNotJSONRequest(method string, path string, data interface{}) 
 	}
 	authURL := fmt.Sprintf("%s%s%s", prefix, host, path)
 
+	log.Printf("%s %s\n", method, authURL)
 	fmt.Printf("%s %s\n", method, authURL)
 
 	var body io.Reader
@@ -270,6 +271,7 @@ func (c *Client) doNotJSONRequest(method string, path string, data interface{}) 
 			return nil, fmt.Errorf("marshaling data: %s", err)
 		}
 
+		log.Printf("Request body %s\n", string(jsonReq))
 		body = bytes.NewBuffer(jsonReq)
 	}
 

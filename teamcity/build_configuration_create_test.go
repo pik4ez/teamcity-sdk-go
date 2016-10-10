@@ -12,9 +12,8 @@ func TestClientCreateBuildConfigurationMock(t *testing.T) {
 	client := NewTestClient(newResponse(`{"id": "Empty_Hello", "projectId":"Empty","templateFlag":false,"name":"Hello"}`), nil)
 
 	config := &types.BuildConfiguration{
-		ProjectID: "Empty",
-		Name:      "Hello",
-		Template:  nil,
+		ProjectID:  "Empty",
+		Name:       "Hello",
 	}
 
 	err := client.CreateBuildConfiguration(config)
@@ -85,11 +84,9 @@ func TestClientCreateBuildConfigurationTemplateFull(t *testing.T) {
 	time.Sleep(5 * time.Second)
 
 	config := &types.BuildConfiguration{
-		ProjectID: "Empty",
-		Name:      "Template Full",
-		Template: &types.TemplateID{
-			ID: "Tempy",
-		},
+		ProjectID:  "Empty",
+		Name:       "Template Full",
+		TemplateID: "Tempy",
 		Steps: types.BuildSteps{
 			types.BuildStep{
 				Name: "Muh",
@@ -163,14 +160,14 @@ func TestClientCreateBuildConfigurationTemplateReorder(t *testing.T) {
 	require.NoError(t, err, "Expected no error")
 	err = client.DeleteBuildConfiguration("Empty_TemplateReorder")
 	require.NoError(t, err, "Expected no error")
+	err = client.DeleteBuildConfiguration("Empty_TemplateReorder")
+	require.NoError(t, err, "Expected no error")
 	time.Sleep(10 * time.Second)
 
 	config := &types.BuildConfiguration{
-		ProjectID: "Empty",
-		Name:      "Template Reorder",
-		Template: &types.TemplateID{
-			ID: "Tempy",
-		},
+		ProjectID:  "Empty",
+		Name:       "Template Reorder",
+		TemplateID: "Tempy",
 		Steps: types.BuildSteps{
 			types.BuildStep{
 				Name: "Muh",

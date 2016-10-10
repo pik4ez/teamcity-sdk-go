@@ -2,23 +2,30 @@ package teamcity
 
 import (
   "errors"
+  "encoding/json"
   "fmt"
   "github.com/umweltdk/teamcity/types"
 )
 
 func (c *Client) ReplaceProjectParameter(projectID,name string, parameter *types.Parameter) error {
   path := fmt.Sprintf("/httpAuth/app/rest/projects/id:%s/parameters/%s", projectID, name)
-  var parameterReturn *types.Parameter
+  var parameterReturn *types.NamedParameter
+  actual := types.NamedParameter{
+    Name: name,
+    Parameter: *parameter,
+  }
 
-  err := c.doRetryRequest("PUT", path, parameter, &parameterReturn)
+  sd, _ := json.Marshal(&actual)
+  fmt.Printf("Replace project parameter %s\n", string(sd))
+  err := c.doRetryRequest("PUT", path, actual, &parameterReturn)
   if err != nil {
     return err
   }
 
   if parameterReturn == nil {
-    return errors.New("parameter not updated")
+    return errors.New("project parameter not updated")
   }
-  *parameter = *parameterReturn
+  *parameter = parameterReturn.Parameter
 
   return nil
 }

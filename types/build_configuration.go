@@ -8,7 +8,7 @@ type BuildConfiguration struct {
 	ID             string         `json:"id,omitempty"`
 	ProjectID      string         `json:"projectId"`
 	TemplateFlag   bool           `json:"templateFlag"`
-	Template       *TemplateID    `json:"template,omitempty"`
+	TemplateID     TemplateId     `json:"template,omitempty"`
 	Name           string         `json:"name"`
 	Description    string         `json:"description,omitempty"`
 	Settings       Properties     `json:"settings,omitempty"`
@@ -18,6 +18,40 @@ type BuildConfiguration struct {
 	//Features []Feature
 	//Triggers []Trigger
 	//AgentRequirements []AgentRequirement
+}
+
+type TemplateId string
+
+type BuildConfigurationShort struct {
+	ID           string `json:"id"`
+	ProjectID    string `json:"projectId,omitempty"`
+	TemplateFlag bool   `json:"templateFlag,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Href         string `json:"href,omitempty"`
+}
+
+func (p TemplateId) MarshalJSON() ([]byte, error) {
+	if p != "" {
+		pi := &BuildConfigurationShort{
+			ID: string(p),
+		}
+		return json.Marshal(pi)
+	} else {
+		return json.Marshal(nil)
+	}
+}
+
+func (p *TemplateId) UnmarshalJSON(b []byte) error {
+	var pi *BuildConfigurationShort
+	if err := json.Unmarshal(b, &pi); err != nil {
+		return err
+	}
+	if pi == nil {
+		*p = ""
+	} else {
+		*p = TemplateId(pi.ID)
+	}
+	return nil
 }
 
 type BuildConfigurations map[string]BuildConfiguration

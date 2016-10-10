@@ -3,6 +3,7 @@ package types
 import (
   "encoding/json"
   "fmt"
+  "log"
   "regexp"
   "sort"
   "strings"
@@ -54,7 +55,6 @@ type Parameter struct {
   Spec *ParameterSpec
 }
 
-
 type PasswordType struct {
 }
 
@@ -94,7 +94,7 @@ type SelectItem struct {
 }
 
 type SelectType struct {
-  AllowMutiple bool
+  AllowMultiple bool
   ValueSeparator string
   Items []SelectItem
 }
@@ -105,7 +105,7 @@ func (t SelectType) TypeName() string {
 
 func (t SelectType) Values() map[string]string {
   ret := make(map[string]string)
-  if t.AllowMutiple {
+  if t.AllowMultiple {
     ret["multiple"] = "true"
     ret["valueSeparator"] = t.ValueSeparator 
   }
@@ -164,7 +164,7 @@ func parseParameterType(s string, v map[string]string) ParameterType {
       items[idx] = itemMap[idx]
     }
     return SelectType{
-      AllowMutiple: v["multiple"] == "true",
+      AllowMultiple: v["multiple"] == "true",
       ValueSeparator: v["valueSeparator"],
       Items: items,
     }
@@ -223,6 +223,7 @@ func(p Parameter) rawTypeValue() *oneParameterType {
     valuesText += fmt.Sprintf(" %s='%s'", name, 
       strings.Replace(strings.Replace(value, "|", "||", -1), "'", "|'", -1))
   }
+  log.Printf("Raw parameter spec %q\n", valuesText)
   return &oneParameterType{
     RawValue: valuesText,
   }
@@ -285,4 +286,18 @@ func (p *Parameters) UnmarshalJSON(b []byte) error {
   }
   *p = m
   return nil
+}
+
+type NamedParameter struct {
+  Name string
+  Parameter
+}
+
+func (p NamedParameter) MarshalJSON() ([]byte, error) {
+  pi := &oneParameter{
+    Name: p.Name,
+    Value: p.Value,
+    Type: p.rawTypeValue(),
+  }
+  return json.Marshal(pi)
 }
