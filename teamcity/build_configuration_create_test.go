@@ -29,14 +29,27 @@ func TestClientCreateBuildConfigurationMinimal(t *testing.T) {
 	require.NoError(t, err, "Expected no error")
 
 	config := &types.BuildConfiguration{
-		ProjectID: "Empty",
-		Name:      "Hello",
+		ProjectID:   "Empty",
+		Name:        "Hello",
+		Description: "Love is in the air",
 	}
 	err = client.CreateBuildConfiguration(config)
 	require.NoError(t, err, "Expected no error")
 	require.NotNil(t, config, "Create to return config")
 
 	assert.Equal(t, "Empty_Hello", config.ID, "Expected create to return ID")
+	assert.Equal(t, "Empty", config.ProjectID, "Expected create to return ProjectID")
+	assert.Equal(t, "Hello", config.Name, "Expected create to return Name")
+	assert.Equal(t, "Love is in the air", config.Description, "Expected create to return Description")
+	assert.Equal(t, make(types.BuildSteps, 0), config.Steps, "no steps")
+
+	config, err = client.GetBuildConfiguration("Empty_Hello")
+	require.NoError(t, err, "Expected no error")
+	require.NotNil(t, config, "Get to return config")
+
+	assert.Equal(t, "Empty", config.ProjectID, "Expected get to return ProjectID")
+	assert.Equal(t, "Hello", config.Name, "Expected get to return Name")
+	assert.Equal(t, "Love is in the air", config.Description, "Expected get to return Description")
 	assert.Equal(t, make(types.BuildSteps, 0), config.Steps, "no steps")
 }
 
@@ -306,7 +319,7 @@ func TestClientCreateBuildConfigurationUsedNameExplicitID(t *testing.T) {
 	config := &types.BuildConfiguration{
 		ID:        "Single_Dubie",
 		ProjectID: "Single",
-		Name:      "Hello",
+		Name:      "Normal",
 	}
 
 	err = client.CreateBuildConfiguration(config)

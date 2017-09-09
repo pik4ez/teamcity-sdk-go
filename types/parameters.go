@@ -200,6 +200,12 @@ func(p Parameter) rawTypeValue() *oneParameterType {
     return nil
   }
   s := p.Spec
+  return &oneParameterType{
+    RawValue: s.String(),
+  }
+}
+
+func(s ParameterSpec) String() string {
   typeText := s.Type.TypeName()
   values := s.Type.Values()
   if s.Label != "" {
@@ -223,10 +229,8 @@ func(p Parameter) rawTypeValue() *oneParameterType {
     valuesText += fmt.Sprintf(" %s='%s'", name, 
       strings.Replace(strings.Replace(value, "|", "||", -1), "'", "|'", -1))
   }
-  log.Printf("Raw parameter spec %q\n", valuesText)
-  return &oneParameterType{
-    RawValue: valuesText,
-  }
+  log.Printf("[DEBUG] Raw parameter spec %q\n", valuesText)
+  return valuesText
 }
 
 var keyValue = regexp.MustCompile("\\w+='([^'|]|\\|\\||\\|')*'")

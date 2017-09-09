@@ -25,8 +25,8 @@ func TestTemplateIdWriting(t *testing.T) {
   assert.NoError(t, err)
   assert.Equal(t, "null", string(b))
 
-  v = "Tempy"
+  v = TemplateId("Tempy")
   b, err = json.Marshal(v)
   assert.NoError(t, err)
-  assert.Equal(t, "{\"id\":\"Tempy\"}", string(v))
+  assert.Equal(t, "{\"id\":\"Tempy\"}", string(b))
 }

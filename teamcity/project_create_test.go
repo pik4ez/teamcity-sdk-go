@@ -32,12 +32,34 @@ func TestClientCreateProjectMinimal(t *testing.T) {
   project := &types.Project{
     ParentProjectID: "Empty",
     Name:            "Hello",
+    Description:     "Look over there",
   }
   err = client.CreateProject(project)
   require.NoError(t, err, "Expected no error")
   require.NotNil(t, project, "Create to return project")
 
   assert.Equal(t, "Empty_Hello", project.ID, "Expected create to return ID")
+  assert.Equal(t, types.ProjectId("Empty"), project.ParentProjectID, "Expected create to return ParentProjectID")
+  assert.Equal(t, "Hello", project.Name, "Expected create to return Name")
+  assert.Equal(t, "", project.Description, "Expected create to return Description")
+  assert.Equal(t, types.Parameters{
+    "env.MUH": types.Parameter{
+      Value: client.VersionParameterValue(t, "env.MUH"),
+      Spec: &types.ParameterSpec{
+        Label: "Muh value",
+        Description: "The Muh value that does all the Muhing",
+        Display: types.Normal,
+        Type: types.PasswordType{},
+      },
+    },
+  }, project.Parameters, "no parameters")
+
+  project, err = client.GetProject("Empty_Hello")
+  require.NoError(t, err, "Expected no error")
+  require.NotNil(t, project, "Get to return project")
+  assert.Equal(t, types.ProjectId("Empty"), project.ParentProjectID, "Expected get to return ParentProjectID")
+  assert.Equal(t, "Hello", project.Name, "Expected get to return Name")
+  assert.Equal(t, "", project.Description, "Expected Empty to return Description")
   assert.Equal(t, types.Parameters{
     "env.MUH": types.Parameter{
       Value: client.VersionParameterValue(t, "env.MUH"),

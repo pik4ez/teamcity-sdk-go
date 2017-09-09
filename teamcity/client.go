@@ -11,7 +11,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 )
 
 // Client to access a TeamCity API
@@ -209,7 +208,7 @@ func (c *Client) CancelBuild(buildID int64, comment string) error {
 }
 
 func (c *Client) GetBuildLog(buildID string) (string, error) {
-	cnt, err := c.doNotJSONRequest("GET", fmt.Sprintf("/httpAuth/downloadBuildLog.html?buildId=%s", buildID), nil)
+	cnt, err := c.doNotJSONRequest("GET", fmt.Sprintf("/httpAuth/downloadBuildLog.html?buildId=%s", buildID), "application/json", "", nil)
 	buf := bytes.NewBuffer(cnt)
 	return buf.String(), err
 }
@@ -227,16 +226,24 @@ func (c *Client) doRetryRequest(method string, path string, data interface{}, v 
 }
 
 func (c *Client) doRequest(method string, path string, data interface{}, v interface{}) error {
-	jsonCnt, err := c.doNotJSONRequest(method, path, data)
+	var body io.Reader
+	if data != nil {
+		jsonReq, err := json.Marshal(data)
+		if err != nil {
+			return fmt.Errorf("marshaling data: %s", err)
+		}
+
+		log.Printf("Request body %s\n", string(jsonReq))
+		body = bytes.NewBuffer(jsonReq)
+	}
+
+	jsonCnt, err := c.doNotJSONRequest(method, path, "application/json", "application/json", body)
 	if err != nil {
 		return err
 	}
 	if jsonCnt == nil {
 		return nil
 	}
-
-	ioutil.WriteFile(fmt.Sprintf("/tmp/mama-%s.json", time.Now().Format("15h04m05.000")), jsonCnt, 0644)
-	//log.Printf("Do response %s\n", string(jsonCnt))
 
 	if v != nil {
 		err = json.Unmarshal(jsonCnt, &v)
@@ -248,7 +255,7 @@ func (c *Client) doRequest(method string, path string, data interface{}, v inter
 	return nil
 }
 
-func (c *Client) doNotJSONRequest(method string, path string, data interface{}) ([]byte, error) {
+func (c *Client) doNotJSONRequest(method string, path string, accept string, mime string, body io.Reader) ([]byte, error) {
 	//Perform some validation on host. Allow them to specify http vs https
 	//if desired and remove trailing slash if present
 	host := c.host
@@ -264,23 +271,12 @@ func (c *Client) doNotJSONRequest(method string, path string, data interface{}) 
 	log.Printf("%s %s\n", method, authURL)
 	fmt.Printf("%s %s\n", method, authURL)
 
-	var body io.Reader
-	if data != nil {
-		jsonReq, err := json.Marshal(data)
-		if err != nil {
-			return nil, fmt.Errorf("marshaling data: %s", err)
-		}
-
-		log.Printf("Request body %s\n", string(jsonReq))
-		body = bytes.NewBuffer(jsonReq)
-	}
-
 	req, _ := http.NewRequest(method, authURL, body)
 	req.SetBasicAuth(c.username, c.password)
-	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Accept", accept)
 
 	if body != nil {
-		req.Header.Add("Content-Type", "application/json")
+		req.Header.Add("Content-Type", mime)
 	}
 
 	resp, err := c.HTTPClient.Do(req)

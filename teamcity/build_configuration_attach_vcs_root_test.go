@@ -62,6 +62,16 @@ func TestClientAttachBuildConfigurationVcsRootExisting(t *testing.T) {
     },
   })
   require.NoError(t, err, "Expected no error")
+  config, err := client.GetBuildConfiguration("Single_TestClientAttachBuildConfigurationVcsRoot")
+  require.NoError(t, err, "Expected no error")
+  require.NotNil(t, config, "Get to return config")
+  assert.Equal(t, types.VcsRootEntries{
+      types.VcsRootEntry{
+        ID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+        VcsRootID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+        CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
+      },
+    }, config.VcsRootEntries)
 
   vcsRoots := types.VcsRootEntries{
     types.VcsRootEntry{
@@ -81,7 +91,70 @@ func TestClientAttachBuildConfigurationVcsRootExisting(t *testing.T) {
   }
   assert.Equal(t, expected, vcsRoots)
 
-  config, err := client.GetBuildConfiguration("Single_TestClientAttachBuildConfigurationVcsRoot")
+  config, err = client.GetBuildConfiguration("Single_TestClientAttachBuildConfigurationVcsRoot")
+  require.NoError(t, err, "Expected no error")
+  require.NotNil(t, config, "Get to return config")
+  assert.Equal(t, expected, config.VcsRootEntries)
+}
+
+func TestClientAttachBuildConfigurationVcsRootTemplateExisting(t *testing.T) {
+  client, err := NewRealTestClient(t)
+  require.NoError(t, err, "Expected no error")
+  err = client.DeleteBuildConfiguration("Single_TestClientAttachBuildConfigurationVcsRootTemplateExisting")
+  err = client.DeleteBuildConfiguration("Single_TestClientAttachBuildConfigurationVcsRootTemplate")
+  require.NoError(t, err, "Expected no error")
+  err = client.CreateBuildConfiguration(&types.BuildConfiguration{
+    ID: "Single_TestClientAttachBuildConfigurationVcsRootTemplate",
+    ProjectID: "Single",
+    TemplateFlag: true,
+    Name: "TestClientAttachBuildConfigurationVcsRootTemplate",
+    VcsRootEntries: types.VcsRootEntries{
+      types.VcsRootEntry{
+        VcsRootID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+        CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
+      },
+    },
+  })
+  require.NoError(t, err, "Expected no error")
+  err = client.CreateBuildConfiguration(&types.BuildConfiguration{
+    ID: "Single_TestClientAttachBuildConfigurationVcsRootTemplateExisting",
+    ProjectID: "Single",
+    Name: "TestClientAttachBuildConfigurationVcsRootTemplateExisting",
+    TemplateID: types.TemplateId("Single_TestClientAttachBuildConfigurationVcsRootTemplate"),
+  })
+  config, err := client.GetBuildConfiguration("Single_TestClientAttachBuildConfigurationVcsRootTemplateExisting")
+  require.NoError(t, err, "Expected no error")
+  require.NotNil(t, config, "Get to return config")
+  assert.Equal(t, types.VcsRootEntries{
+      types.VcsRootEntry{
+        ID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+        VcsRootID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+        CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
+      },
+    }, config.VcsRootEntries)
+
+
+  vcsRoots := types.VcsRootEntries{
+    types.VcsRootEntry{
+      ID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+      VcsRootID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+      CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
+    },
+  }
+  err = client.AttachBuildConfigurationVcsRoot("Single_TestClientAttachBuildConfigurationVcsRootTemplateExisting", &vcsRoots[0])
+  require.NoError(t, err, "Expected no error")
+  require.NotNil(t, vcsRoots[0], "Update to return parameters")
+
+  expected := types.VcsRootEntries{
+    types.VcsRootEntry{
+      ID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+      VcsRootID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
+      CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
+    },
+  }
+  assert.Equal(t, expected, vcsRoots)
+
+  config, err = client.GetBuildConfiguration("Single_TestClientAttachBuildConfigurationVcsRootTemplateExisting")
   require.NoError(t, err, "Expected no error")
   require.NotNil(t, config, "Get to return config")
   assert.Equal(t, expected, config.VcsRootEntries)
