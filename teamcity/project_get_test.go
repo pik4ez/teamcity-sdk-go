@@ -1,37 +1,37 @@
 package teamcity
 
 import (
-  "github.com/stretchr/testify/assert"
-  "github.com/stretchr/testify/require"
-  "github.com/umweltdk/teamcity/types"
-  "testing"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/Cardfree/teamcity-sdk-go/types"
+	"testing"
 )
 
 func TestClientGetProject(t *testing.T) {
-  client, err := NewRealTestClient(t)
-  require.NoError(t, err, "Expected no error")
+	client, err := NewRealTestClient(t)
+	require.NoError(t, err, "Expected no error")
 
-  config, err := client.GetProject("Empty")
-  require.NoError(t, err, "Expected no error")
-  require.NotNil(t, config, "Create to return config")
+	config, err := client.GetProject("Empty")
+	require.NoError(t, err, "Expected no error")
+	require.NotNil(t, config, "Create to return config")
 
-  assert.Equal(t, types.Parameters{
-    "env.MUH": types.Parameter{
-      Value: client.VersionParameterValue(t, "env.MUH"),
-      Spec: &types.ParameterSpec{
-        Label: "Muh value",
-        Description: "The Muh value that does all the Muhing",
-        Type: types.PasswordType{},
-      },
-    },
-  }, config.Parameters, "Parameters")
+	assert.Equal(t, types.Parameters{
+		"env.MUH": types.Parameter{
+			Value: client.VersionParameterValue(t, "env.MUH"),
+			Spec: &types.ParameterSpec{
+				Label:       "Muh value",
+				Description: "The Muh value that does all the Muhing",
+				Type:        types.PasswordType{},
+			},
+		},
+	}, config.Parameters, "Parameters")
 }
 
 func TestClientGetProjectMissing(t *testing.T) {
-  client, err := NewRealTestClient(t)
-  require.NoError(t, err, "Expected no error")
+	client, err := NewRealTestClient(t)
+	require.NoError(t, err, "Expected no error")
 
-  config, err := client.GetProject("Empt")
-  require.NoError(t, err, "Expected no error")
-  require.Nil(t, config, "Expected no config")
+	config, err := client.GetProject("Empt")
+	require.NoError(t, err, "Expected no error")
+	require.Nil(t, config, "Expected no config")
 }

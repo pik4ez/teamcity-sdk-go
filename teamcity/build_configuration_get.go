@@ -3,7 +3,7 @@ package teamcity
 import (
 	//"errors"
 	"fmt"
-	"github.com/umweltdk/teamcity/types"
+	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) GetBuildConfiguration(buildConfID string) (*types.BuildConfiguration, error) {

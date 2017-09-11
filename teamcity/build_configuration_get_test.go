@@ -3,7 +3,7 @@ package teamcity
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/umweltdk/teamcity/types"
+	"github.com/Cardfree/teamcity-sdk-go/types"
 	"testing"
 )
 

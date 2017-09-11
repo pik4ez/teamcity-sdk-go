@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/umweltdk/teamcity/types"
+	"github.com/Cardfree/teamcity-sdk-go/types"
 	"io"
 	"io/ioutil"
 	"log"
@@ -40,9 +40,9 @@ func (c *Client) Server() (*types.Server, error) {
 
 func (c *Client) QueueBuild(buildTypeID string, branchName string, properties types.Properties) (*types.Build, error) {
 	jsonQuery := struct {
-		BuildTypeID string `json:"buildTypeId,omitempty"`
+		BuildTypeID string           `json:"buildTypeId,omitempty"`
 		Properties  types.Properties `json:"properties"`
-		BranchName string `json:"branchName,omitempty"`
+		BranchName  string           `json:"branchName,omitempty"`
 	}{}
 	jsonQuery.BuildTypeID = buildTypeID
 	if branchName != "" {

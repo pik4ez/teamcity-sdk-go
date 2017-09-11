@@ -100,7 +100,6 @@ func (tags *Tags) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-
 func (b *Build) String() string {
 	return fmt.Sprintf("Build %d, %#v state=%s", b.ID, b.ComputedState(), b.State)
 }

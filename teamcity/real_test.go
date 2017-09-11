@@ -3,7 +3,7 @@ package teamcity
 import (
 	"flag"
 	"fmt"
-	"github.com/umweltdk/teamcity/types"
+	"github.com/Cardfree/teamcity-sdk-go/types"
 	"testing"
 	"time"
 )

@@ -1,9 +1,9 @@
 package teamcity
 
 import (
+	"github.com/Cardfree/teamcity-sdk-go/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/umweltdk/teamcity/types"
 	"testing"
 	"time"
 )
@@ -12,8 +12,8 @@ func TestClientCreateBuildConfigurationMock(t *testing.T) {
 	client := NewTestClient(newResponse(`{"id": "Empty_Hello", "projectId":"Empty","templateFlag":false,"name":"Hello"}`), nil)
 
 	config := &types.BuildConfiguration{
-		ProjectID:  "Empty",
-		Name:       "Hello",
+		ProjectID: "Empty",
+		Name:      "Hello",
 	}
 
 	err := client.CreateBuildConfiguration(config)
@@ -60,15 +60,15 @@ func TestClientCreateTemplate(t *testing.T) {
 	require.NoError(t, err, "Expected no error")
 
 	config := &types.BuildConfiguration{
-		ProjectID: "Single",
-		Name:      "Templer",
+		ProjectID:    "Single",
+		Name:         "Templer",
 		TemplateFlag: true,
-    VcsRootEntries: types.VcsRootEntries{
-      types.VcsRootEntry{
-        VcsRootID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
-        CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
-      },
-    },
+		VcsRootEntries: types.VcsRootEntries{
+			types.VcsRootEntry{
+				VcsRootID:     "Single_HttpsGithubComUmweltdkDockerNodeGit",
+				CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
+			},
+		},
 	}
 	err = client.CreateBuildConfiguration(config)
 	require.NoError(t, err, "Expected no error")
@@ -77,12 +77,12 @@ func TestClientCreateTemplate(t *testing.T) {
 	assert.Equal(t, "Single_Templer", config.ID, "Expected create to return ID")
 	assert.Equal(t, make(types.BuildSteps, 0), config.Steps, "no steps")
 	assert.Equal(t, types.VcsRootEntries{
-      types.VcsRootEntry{
-      	ID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
-        VcsRootID: "Single_HttpsGithubComUmweltdkDockerNodeGit",
-        CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
-      },
-    }, config.VcsRootEntries, "vcs root entries")
+		types.VcsRootEntry{
+			ID:            "Single_HttpsGithubComUmweltdkDockerNodeGit",
+			VcsRootID:     "Single_HttpsGithubComUmweltdkDockerNodeGit",
+			CheckoutRules: "+:refs/heads/master\n+:refs/heads/trigger*",
+		},
+	}, config.VcsRootEntries, "vcs root entries")
 
 	loaded, err := client.GetBuildConfiguration("Single_Templer")
 	assert.Equal(t, true, config.TemplateFlag, "Expected template")

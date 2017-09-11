@@ -2,7 +2,7 @@ package teamcity
 
 import (
 	"errors"
-	"github.com/umweltdk/teamcity/types"
+	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) CreateBuildConfiguration(buildConfig *types.BuildConfiguration) error {
