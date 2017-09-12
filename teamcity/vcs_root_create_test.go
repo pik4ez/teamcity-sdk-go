@@ -35,7 +35,7 @@ func TestClientCreateVcsRootMock(t *testing.T) {
 func TestClientCreateVcsRootMinimal(t *testing.T) {
 	client, err := NewRealTestClient(t)
 	require.NoError(t, err, "Expected no error")
-	err = client.DeleteProject("Empty_Hello")
+	err = client.DeleteVcsRoot("Empty_Plink")
 	require.NoError(t, err, "Expected no error")
 
 	vcs := &types.VcsRoot{
