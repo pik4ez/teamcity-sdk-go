@@ -26,6 +26,7 @@
           <param name="revisionRule" value="lastFinished" />
           <param name="schedulingPolicy" value="weekly" />
           <param name="timezone" value="SERVER" />
+          <param name="enableQueueOptimization" value="true" />
         </parameters>
       </build-trigger>
     </build-triggers>
