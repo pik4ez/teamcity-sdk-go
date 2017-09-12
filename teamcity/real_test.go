@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-var host = flag.String("host", "", "hostname to test against")
+var host = flag.String("host", "localhost", "hostname to test against")
 
 func (c *Client) WaitForReady() error {
 	path := fmt.Sprintf("/httpAuth/app/rest/projects")
@@ -62,7 +62,7 @@ func (c *Client) VersionParameterValue(t *testing.T, parameter string) string {
 
 func NewRealTestClient(t *testing.T) (*Client, error) {
 	IsRealTestSkip(t)
-	client := New(fmt.Sprintf("http://%s:8111", *host), "admin", "admin")
+	client := New(fmt.Sprintf("http://%s:8112", *host), "admin", "admin")
 	err := client.WaitForReady()
 	if err != nil {
 		return nil, err
