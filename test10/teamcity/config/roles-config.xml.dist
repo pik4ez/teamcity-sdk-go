@@ -34,7 +34,9 @@ Available permission ids are:
   REMOVE_BUILD("Remove finished build"),
   EDIT_VERSIONED_SETTINGS("Enable / disable versioned settings"),
   ENABLE_DISABLE_AGENT_FOR_PROJECT("Enable / disable agents associated with project"),
-  START_STOP_CLOUD_AGENT_FOR_PROJECT("Start / Stop cloud agent for project"),
+  START_STOP_CLOUD_AGENT("Start / Stop cloud agent"),
+  VIEW_AGENT_CLOUDS("View cloud images and instances"),
+  MANAGE_AGENT_CLOUDS("Manage project's agent cloud profiles"),
   ///VIEW_AGENT_USAGE_STATISTICS_FOR_PROJECT("View project agent usage statistics"),
   CHANGE_AGENT_RUN_CONFIGURATION_POLICY_FOR_PROJECT("Change agent run configuration policy for project"),
   ADMINISTER_AGENT_FOR_PROJECT("Administer project agent machines (e.g. reboot, view agent logs, etc.)"),
@@ -68,15 +70,13 @@ Available permission ids are:
   MANAGE_ROLES("Manage roles (create, delete, change permissions)"),
   ADMINISTER_AGENT("Administer build agent machines (e.g. reboot, view agent logs, etc.)"),
   VIEW_AUDIT_LOG("View audit log"),
-  VIEW_AGENT_CLOUDS("View available images and running instances"),
-  MANAGE_AGENT_CLOUDS("Manage agent cloud profiles"),
-  START_STOP_CLOUD_AGENT("Start / Stop cloud agent"),
   VIEW_SERVER_ERRORS("View server errors"),
   VIEW_USAGE_STATISTICS("View usage statistics"),
   BACKUP("Change backup settings and control backup process"),
   IMPORT_PROJECTS("Import projects"),
   MANAGE_AGENT_POOLS("Manage agent pools"),
-  VIEW_USER_PROFILE("View user profile")
+  VIEW_USER_PROFILE("View user profile"),
+  VIEW_ALL_USERS("View all registered users")
 
 Note: SYSTEM_ADMIN role id is preserved, role with such id must not occur in this config file.
 -->
@@ -108,6 +108,8 @@ Note: SYSTEM_ADMIN role id is preserved, role with such id must not occur in thi
       <permission id="VIEW_AGENT_DETAILS"/>
       <permission id="VIEW_AGENT_USAGE_STATISTICS"/>
       <permission id="VIEW_BUILD_RUNTIME_DATA"/>
+      <permission id="VIEW_ALL_USERS" />
+      <permission id="VIEW_AGENT_CLOUDS" />
     </permissions>
   </role>
   <role id="PROJECT_ADMIN" orderNum="30" name="Project administrator">
@@ -117,13 +119,12 @@ Note: SYSTEM_ADMIN role id is preserved, role with such id must not occur in thi
       <permission id="EDIT_PROJECT"/>
       <permission id="MANAGE_AGENT_POOLS_FOR_PROJECT"/>
       <permission id="CANCEL_ANY_PERSONAL_BUILD"/>
-      <permission id="CHANGE_USER_ROLES_IN_PROJECT"/>
       <permission id="VIEW_AUDIT_LOG"/>
       <permission id="ARCHIVE_PROJECT"/>
-      <permission id="VIEW_SERVER_ERRORS"/>
       <permission id="MANAGE_BUILD_PROBLEMS"/>
       <permission id="MANAGE_BUILD_PROBLEM_INSTANCES"/>
       <permission id="VIEW_USER_PROFILE"/>
+      <permission id="CHANGE_USER_ROLES_IN_PROJECT"/>
       <permission id="REMOVE_BUILD"/>
       <permission id="CREATE_SUB_PROJECT"/>
       <permission id="DELETE_SUB_PROJECT"/>
@@ -132,9 +133,9 @@ Note: SYSTEM_ADMIN role id is preserved, role with such id must not occur in thi
       <permission id="REMOVE_AGENT_FOR_PROJECT" />
       <permission id="ADMINISTER_AGENT_FOR_PROJECT" />
       <permission id="CHANGE_AGENT_RUN_CONFIGURATION_POLICY_FOR_PROJECT" />
-      <permission id="VIEW_AGENT_CLOUDS"/>
       <permission id="VIEW_AGENT_USAGE_STATISTICS"/>
-      <permission id="START_STOP_CLOUD_AGENT_FOR_PROJECT" />
+      <permission id="START_STOP_CLOUD_AGENT" />
+      <permission id="MANAGE_AGENT_CLOUDS"/>
       <permission id="AUTHORIZE_AGENT_FOR_PROJECT" />
       <permission id="EDIT_VCS_MODIFICATION" />
     </permissions>
