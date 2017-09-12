@@ -12,7 +12,7 @@
 #java.naming.provider.url=ldap://<server>:389/<distinguished name>
 
 # The credentials to use when browsing LDAP during the login and synchronization.
-# Note that many LDAP server require a full DN in "principal" (e.g. CN=Administrator,CN=Users,DC=example,DC=com), and this value should not be url-escaped.
+# Note that many LDAP server require a full DN in "principal" (e.g. CN=Administrator,CN=Users,DC=example inc,DC=com), and this value should not be url-escaped.
 # For Active Directory you can include full DN or full login name with domain (e.g. DOMAIN\\Username )
 # The user must have read access to all LDAP entries under 'teamcity.users.base' and 'teamcity.groups.base' (see below).
 # To store the password value not in clear text, refer to https://confluence.jetbrains.com/display/TCD10/LDAP+Integration#LDAPIntegration-scrambledPassword
@@ -98,10 +98,13 @@ teamcity.options.users.synchronize=false
 #teamcity.users.filter=(objectClass=user)
 
 ### GROUPS SETTINGS ###
-# These settings are mandatory if groups synchronization is turned on (ldap-mapping.xml exists)
+# These settings are mandatory if groups synchronization is turned on
 
 # Set to "true" to enable the synchronization for groups listed in ldap-mapping.xml file.
-# IMPORTANT NOTE: TeamCity groups should be already created manually and listed in ldap-mapping.xml file.
+# This syncs user group membership in TeamCity based on that in LDAP.
+# The users affected should be matched by 'teamcity.users.base'/'teamcity.users.filter'. The groups affected should be matched by 'teamcity.groups.base'/'teamcity.groups.filter'
+# IMPORTANT NOTE: The set of groups processed by TeamCity is fixed: the groups should be created manually in TeamCity and listed in ldap-mapping.xml file.
+# Unless 'teamcity.groups.retrieveUsersFromNestedGroups' is set to true, only direct members of LDAP groups are processed
 teamcity.options.groups.synchronize=false
 
 # The groups base DN. If defined, groups are retrieved only from the LDAP subtree denoted by this DN.
@@ -114,7 +117,9 @@ teamcity.options.groups.synchronize=false
 #teamcity.groups.filter=(objectClass=group)
 
 # Set to "true" to enable automatic user creation and deletion during group synchronization.
+# Creates users in TeamCity if they are found in one of the mapped groups
 teamcity.options.createUsers=false
+# Deleted users in TeamCity if they are not found in any of the mapped groups
 teamcity.options.deleteUsers=false
 
 ### OPTIONAL SETTINGS ###
@@ -182,6 +187,10 @@ teamcity.users.property.email=mail
 # IMPORTANT: turning on this property suppresses the effect of "teamcity.options.createUsers".
 #teamcity.users.syncOnlyTeamcityUsers=true
 #teamcity.users.filterPackSize=100
+
+# When set to 'true', TeamCity processes nested LDAP groups to get members of a the mapped groups and treats the found users as if they are direct members of the group.
+# Note: when using this option make sure that all the groups in the hierarchy are matched by 'teamcity.groups.base'/'teamcity.groups.filter'
+#teamcity.groups.retrieveUsersFromNestedGroups=true
 
 # The following property can be used when only groups mentioned in a mapping file should be fetched from LDAP.
 # Useful when the number of LDAP groups greatly exceeds the number of mapped groups.

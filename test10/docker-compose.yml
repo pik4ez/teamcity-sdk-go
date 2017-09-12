@@ -1,13 +1,13 @@
 version: '2'
 services:
   teamcity10:
-    image: jetbrains/teamcity-server:10.0.2
+    image: jetbrains/teamcity-server:2017.1.4
     ports:
       - 8112:8111
     volumes:
       - ./teamcity:/data/teamcity_server/datadir
   agent10:
-    image: jetbrains/teamcity-agent:10.0.2
+    image: jetbrains/teamcity-agent:2017.1.4
     depends_on:
       - teamcity10
     links:
