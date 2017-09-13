@@ -9,7 +9,7 @@ type VcsRoot struct {
 	Name       string     `json:"name"`
 	VcsName    string     `json:"vcsName"`
 	Href       string     `json:"href"`
-	ProjectID  ProjectId  `json:"project"`
+	ProjectID  string     `json:"projectId"`
 	Properties Properties `json:"properties"`
 }
 
