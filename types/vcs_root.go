@@ -5,11 +5,11 @@ import (
 )
 
 type VcsRoot struct {
-	ID         string     `json:"id"`
+	ID         string     `json:"id,omitempty"`
 	Name       string     `json:"name"`
 	VcsName    string     `json:"vcsName"`
-	Href       string     `json:"href"`
-	ProjectID  string     `json:"projectId"`
+	Href       string     `json:"href,omitempty"`
+	ProjectID  ProjectId  `json:"project"`
 	Properties Properties `json:"properties"`
 }
 

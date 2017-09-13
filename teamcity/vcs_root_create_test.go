@@ -1,6 +1,7 @@
 package teamcity
 
 import (
+	"fmt"
 	"github.com/Cardfree/teamcity-sdk-go/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -35,17 +36,20 @@ func TestClientCreateVcsRootMock(t *testing.T) {
 func TestClientCreateVcsRootMinimal(t *testing.T) {
 	client, err := NewRealTestClient(t)
 	require.NoError(t, err, "Expected no error")
-	err = client.DeleteVcsRoot("Empty_Plink")
+
+	vcsProjectId := "Empty"
+	vcsName := "Plink"
+	vcsId := fmt.Sprintf("%s_%s", vcsProjectId, vcsName)
+
+	err = client.DeleteVcsRoot(vcsId)
 	require.NoError(t, err, "Expected no error")
 	time.Sleep(5 * time.Second)
 
-	project := "Empty"
-
 	vcs := &types.VcsRoot{
-		ID:        "Empty_Plink",
-		Name:      "Plink",
+		ID:        vcsId,
+		Name:      vcsName,
 		VcsName:   "jetbrains.git",
-		ProjectID: types.ProjectId(project),
+		ProjectID: types.ProjectId(vcsProjectId),
 
 		Properties: types.Properties{
 			"url":    "https://github.com/cardfree/teamcity-sdk-go",
