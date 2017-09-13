@@ -6,11 +6,11 @@ import (
 
 type VcsRoot struct {
 	ID         string     `json:"id,omitempty"`
-	Name       string     `json:"name"`
-	VcsName    string     `json:"vcsName"`
+	Name       string     `json:"name,omitempty"`
+	VcsName    string     `json:"vcsName,omitempty"`
 	Href       string     `json:"href,omitempty"`
-	ProjectID  ProjectId  `json:"project"`
-	Properties Properties `json:"properties"`
+	ProjectID  ProjectId  `json:"project,omitempty"`
+	Properties Properties `json:"properties,omitempty"`
 }
 
 type VcsRootShort struct {
