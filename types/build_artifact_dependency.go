@@ -14,7 +14,7 @@ type BuildArtifactDependency struct {
 type BuildArtifactDependencies []BuildArtifactDependency
 
 type buildArtifactDependenciesInput struct {
-	ArtifactDependency []BuildArtifactDependency `json:"trtifact-dependency"`
+	ArtifactDependency []BuildArtifactDependency `json:"artifact-dependency"`
 }
 
 func (bsd BuildArtifactDependencies) MarshalJSON() ([]byte, error) {

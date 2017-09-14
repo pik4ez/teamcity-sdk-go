@@ -341,6 +341,84 @@ func TestClientCreateBuildConfigurationFull(t *testing.T) {
 			},
 		},
 	}, config.Steps, "Build steps")
+
+	assert.Equal(t, types.BuildFeatures{
+		types.BuildFeature{
+			ID:   config.Features[0].ID,
+			Type: "commit-status-publisher",
+			Properties: types.Properties{
+				"github_authentication_type": "token",
+				"github_host":                "https://api.github.com",
+				"publisherId":                "githubStatusPublisher",
+			},
+		},
+	}, config.Features, "Build Features")
+
+	assert.Equal(t, types.BuildTriggers{
+		types.BuildTrigger{
+			ID:   config.Triggers[0].ID,
+			Type: "vcsTrigger",
+			Properties: types.Properties{
+				"groupCheckinsByCommitter":   "true",
+				"perCheckinTriggering":       "true",
+				"quietPeriodMode":            "DO_NOT_USE",
+				"watchChangesInDependencies": "true",
+			},
+		},
+	}, config.Triggers, "Build Triggers")
+
+	assert.Equal(t, types.BuildSnapshotDependencies{
+		types.BuildSnapshotDependency{
+			ID:   config.SnapshotDependencies[0].ID,
+			Type: "snapshot_dependency",
+			Properties: types.Properties{
+				"run-build-if-dependency-failed":          "RUN_ADD_PROBLEM",
+				"run-build-if-dependency-failed-to-start": "MAKE_FAILED_TO_START",
+				"run-build-on-the-same-agent":             "true",
+				"take-started-build-with-same-revisions":  "true",
+				"take-successful-builds-only":             "true",
+			},
+			SourceBuildType: types.BuildType{
+				ID:          "Single_Normal",
+				Name:        config.SnapshotDependencies[0].SourceBuildType.Name,
+				ProjectName: config.SnapshotDependencies[0].SourceBuildType.ProjectName,
+				ProjectID:   config.SnapshotDependencies[0].SourceBuildType.ProjectID,
+				Href:        config.SnapshotDependencies[0].SourceBuildType.Href,
+			},
+		},
+	}, config.SnapshotDependencies, "Build Snapshot Dependencies")
+
+	assert.Equal(t, types.BuildArtifactDependencies{
+		types.BuildArtifactDependency{
+			ID:   config.ArtifactDependencies[0].ID,
+			Type: "artifact_dependency",
+			Properties: types.Properties{
+				"cleanDestinationDirectory": "false",
+				"pathRules":                 "+:dist/release.tar.gz => dist/",
+				"revisionName":              "sameChainOrLastFinished",
+				"revisionValue":             "latest.sameChainOrLastFinished",
+			},
+			SourceBuildType: types.BuildType{
+				ID:          "Single_Normal",
+				Name:        config.ArtifactDependencies[0].SourceBuildType.Name,
+				ProjectName: config.ArtifactDependencies[0].SourceBuildType.ProjectName,
+				ProjectID:   config.ArtifactDependencies[0].SourceBuildType.ProjectID,
+				Href:        config.ArtifactDependencies[0].SourceBuildType.Href,
+			},
+		},
+	}, config.ArtifactDependencies, "Build Artifact Dependencies")
+
+	assert.Equal(t, types.BuildAgentRequirements{
+		types.BuildAgentRequirement{
+			ID:   config.AgentRequirements[0].ID,
+			Type: "more-than",
+			Properties: types.Properties{
+				"property-name":  "env.CONFIG_FILE",
+				"property-value": "1",
+			},
+		},
+	}, config.AgentRequirements, "Build Agent Requirements")
+
 }
 
 func TestClientCreateBuildConfigurationUsedID(t *testing.T) {
