@@ -5,9 +5,10 @@ import (
 )
 
 type BuildSnapshotDependency struct {
-	ID         string     `json:"id"`
-	Type       string     `json:"type"`
-	Properties Properties `json:"properties"`
+	ID              string     `json:"id"`
+	Type            string     `json:"type"`
+	Properties      Properties `json:"properties"`
+	SourceBuildType BuildType  `json:"source-buildType"`
 }
 
 type BuildSnapshotDependencies []BuildSnapshotDependency
