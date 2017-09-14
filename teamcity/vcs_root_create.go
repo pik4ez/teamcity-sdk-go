@@ -15,7 +15,7 @@ func (c *Client) CreateVcsRoot(vcs *types.VcsRoot) error {
 	}
 
 	if vcsReturn == nil {
-		return errors.New("vcs root not created")
+		return errors.New("VCS Root not created")
 	}
 	*vcs = *vcsReturn
 
