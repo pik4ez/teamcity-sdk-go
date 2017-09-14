@@ -5,19 +5,21 @@ import (
 )
 
 type BuildConfiguration struct {
-	ID             string         `json:"id,omitempty"`
-	ProjectID      string         `json:"projectId"`
-	TemplateFlag   bool           `json:"templateFlag"`
-	TemplateID     TemplateId     `json:"template,omitempty"`
-	Name           string         `json:"name"`
-	Description    string         `json:"description,omitempty"`
-	Settings       Properties     `json:"settings,omitempty"`
-	Parameters     Parameters     `json:"parameters,omitempty"`
-	Steps          BuildSteps     `json:"steps,omitempty"`
-	VcsRootEntries VcsRootEntries `json:"vcs-root-entries,omitempty"`
-	//Features []Feature
-	//Triggers []Trigger
-	//AgentRequirements []AgentRequirement
+	ID                   string                  `json:"id,omitempty"`
+	ProjectID            string                  `json:"projectId"`
+	TemplateFlag         bool                    `json:"templateFlag"`
+	TemplateID           TemplateId              `json:"template,omitempty"`
+	Name                 string                  `json:"name"`
+	Description          string                  `json:"description,omitempty"`
+	VcsRootEntries       VcsRootEntries          `json:"vcs-root-entries,omitempty"`
+	Settings             Properties              `json:"settings,omitempty"`
+	Parameters           Parameters              `json:"parameters,omitempty"`
+	Steps                BuildSteps              `json:"steps,omitempty"`
+	Features             BuildFeature            `json:"features,omitempty"`
+	Triggers             BuildTrigger            `json:"triggers,omitempty"`
+	SnapshotDependencies BuildSnapshotDependency `json:"snapshot-dependencies,omitempty"`
+	ArtifactDependencies BuildArtifactDependency `json:"artifact-dependencies,omitempty"`
+	AgentRequirements    BuildAgentRequirement   `json:"agent-requirements,omitempty"`
 }
 
 type TemplateId string

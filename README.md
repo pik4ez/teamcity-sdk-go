@@ -7,7 +7,7 @@ This is a simple wrapper around the TeamCity API.
 
 Sample usage:
 
-```
+```go
 package main
 
 import "github.com/Cardfree/teamcity-go-sdk/teamcity"
@@ -28,12 +28,16 @@ func main() {
 - [teamcity-rest-api](https://dploeger.github.io/teamcity-rest-api/)
 - [perl5-teamcity-api](http://eilara.github.io/perl5-teamcity-api/)
 
+## Starting the Docker Container for Testing
+```bash
+docker-compose up teamcity10
+```
 
 ## Upgrading Teamcity Test Data
 
 1. Update the docker-compose.yml and Dockerfile's to the new version of teamcity
 1. 
-```
+```bash
 docker exec -it ${CONTAINER_ID} bash
 cp -r /data/teamcity_server/datadir/config /test-data
 cp -r /data/teamcity_server/datadir/system /test-data
