@@ -227,7 +227,7 @@ func (s ParameterSpec) String() string {
 		values["description"] = s.Description
 	}
 	values["display"] = s.Display.String()
-	values["read_only"] = s.ReadOnly.String()
+	values["readOnly"] = s.ReadOnly.String()
 
 	// Sort keys so that raw text is deterministic and testable
 	valueKeys := make([]string, 0)
@@ -264,7 +264,7 @@ func (opt *oneParameterType) parseRawValue() *ParameterSpec {
 		Label:       specValue["label"],
 		Description: specValue["description"],
 		Display:     parseDisplay(specValue["display"]),
-		ReadOnly:    parseReadOnly(specValue["read_only"]),
+		ReadOnly:    parseReadOnly(specValue["readOnly"]),
 		Type:        parseParameterType(sp[0], specValue),
 	}
 }
