@@ -33,7 +33,10 @@ func main() {
 docker-compose up teamcity10
 ```
 
-## Upgrading Teamcity Test Data
+## Upgrading Teamcity
+
+### Test Data
+When Upgrading from one version of Teamcity to Another the Test Data needs to be upgraded as well.
 
 1. Update the docker-compose.yml and Dockerfile's to the new version of teamcity
 1. 
