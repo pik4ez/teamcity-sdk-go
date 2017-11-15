@@ -11,6 +11,7 @@ import (
 )
 
 type Display int
+type ReadOnly bool
 
 const (
 	Normal Display = iota
@@ -38,6 +39,20 @@ func parseDisplay(s string) Display {
 	return Normal
 }
 
+func (s ReadOnly) String() string {
+	if s == true {
+		return "true"
+	}
+	return "false"
+}
+
+func parseReadOnly(s string) ReadOnly {
+	if s == "true" {
+		return true
+	}
+	return false
+}
+
 type ParameterType interface {
 	TypeName() string
 	Values() map[string]string
@@ -47,6 +62,7 @@ type ParameterSpec struct {
 	Label       string
 	Description string
 	Display     Display
+	ReadOnly    ReadOnly
 	Type        ParameterType
 }
 
@@ -211,6 +227,7 @@ func (s ParameterSpec) String() string {
 		values["description"] = s.Description
 	}
 	values["display"] = s.Display.String()
+	values["readOnly"] = s.ReadOnly.String()
 
 	// Sort keys so that raw text is deterministic and testable
 	valueKeys := make([]string, 0)
@@ -247,6 +264,7 @@ func (opt *oneParameterType) parseRawValue() *ParameterSpec {
 		Label:       specValue["label"],
 		Description: specValue["description"],
 		Display:     parseDisplay(specValue["display"]),
+		ReadOnly:    parseReadOnly(specValue["readOnly"]),
 		Type:        parseParameterType(sp[0], specValue),
 	}
 }
