@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (c *Client) DeleteAgentPoolAttachement(name string, project string) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/agentPools/name:%s/%s", name, project)
+func (c *Client) DeleteAgentPoolAttachement(pool string, project string) error {
+	path := fmt.Sprintf("/httpAuth/app/rest/agentPools/name:%s/projects/%s", pool, project)
 	return c.doRetryRequest("DELETE", path, nil, nil)
 }
