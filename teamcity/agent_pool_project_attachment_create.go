@@ -6,8 +6,8 @@ import (
 	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
-func (c *Client) CreateAgentPoolProjectAttachment(name string, apa *types.AgentPoolAttachment) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/agentPools/name:%s/projects", name)
+func (c *Client) CreateAgentPoolProjectAttachment(pool int, apa *types.AgentPoolAttachment) error {
+	path := fmt.Sprintf("/httpAuth/app/rest/agentPools/id:%d/projects", pool)
 	var poolReturn *types.Project
 
 	err := c.doRetryRequest("POST", path, apa, &poolReturn)
