@@ -3,4 +3,4 @@
 <#import "common.ftl" as common>
 
 <#global link>${link.buildResultsLink}</#global>
-<#global message><#if build.personal>Personal build<#else>Build</#if> ${buildType.fullName} <@common.short_build_info build/> is failing ${var.buildShortStatusDescription} on ${agentName}</#global>
+<#global message><#if build.personal>Personal build<#else>Build</#if> ${buildType.fullName} <@common.short_build_info build/> is failing ${var.buildShortStatusDescription}<#if !build.agentLessBuild> on ${agentName}</#if></#global>

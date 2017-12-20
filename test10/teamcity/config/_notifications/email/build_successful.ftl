@@ -7,7 +7,7 @@
 
 <#global body>Build ${project.fullName} :: ${buildType.name} <@common.short_build_info build/> successful ${var.buildShortStatusDescription}.
 <@resp.buildTypeInvestigation buildType true/>
-Agent: ${agentName}
+<#if !build.agentLessBuild>Agent: ${agentName}</#if>
 Build results: ${link.buildResultsLink}
 
 ${var.buildCompilationErrors}${var.buildFailedTestsErrors}${var.buildChanges}

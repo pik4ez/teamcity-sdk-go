@@ -1,5 +1,3 @@
 <root>
-  <browser name="Safari">
-    <usage userId="1" timestamp="1475257801821" />
-  </browser>
+  <browser name="Safari" />
 </root>

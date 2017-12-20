@@ -1,5 +1,3 @@
 <root>
-  <authModule name="Basic HTTP">
-    <usage userId="1" timestamp="1475155993258" />
-  </authModule>
+  <authModule name="Basic HTTP" />
 </root>
