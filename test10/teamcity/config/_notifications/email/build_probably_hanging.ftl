@@ -9,7 +9,7 @@
 Estimated duration: ${var.buildDurationEstimate}, overtime: ${var.buildDurationOvertime}
 Last message was received on: ${var.buildLastMessageTimestamp} (${var.buildTimeSinceLastMessage} ago)
 <@resp.buildTypeInvestigation buildType false/>
-Agent: ${agentName}
+<#if !build.agentLessBuild>Agent: ${agentName}</#if>
 Build results: ${link.buildResultsLink}
 
 ${var.buildChanges}

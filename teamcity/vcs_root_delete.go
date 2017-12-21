@@ -5,6 +5,6 @@ import (
 )
 
 func (c *Client) DeleteVcsRoot(VcsRootId string) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/vcs-roots/id:%s", VcsRootId)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/vcs-roots/id:%s", c.version, VcsRootId)
 	return c.doRetryRequest("DELETE", path, nil, nil)
 }

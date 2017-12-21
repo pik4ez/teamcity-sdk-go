@@ -2,11 +2,13 @@ package teamcity
 
 import (
 	"errors"
+	"fmt"
+
 	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) CreateProject(project *types.Project) error {
-	path := "/httpAuth/app/rest/projects"
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/projects", c.version)
 	var projectReturn *types.Project
 
 	err := c.doRetryRequest("POST", path, project, &projectReturn)

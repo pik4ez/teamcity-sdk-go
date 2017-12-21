@@ -3,6 +3,6 @@
 <#import "common.ftl" as common>
 
 <#global link>${link.buildResultsLink}</#global>
-<#global message>Build ${buildType.fullName} <@common.short_build_info build/> started on ${agentName}
+<#global message>Build ${buildType.fullName} <@common.short_build_info build/> started<#if !build.agentLessBuild> on ${agentName}</#if>
 <#if build.triggeredBy.triggeredByUser> (triggered by ${build.triggeredBy.user.descriptiveName})</#if>
 </#global>

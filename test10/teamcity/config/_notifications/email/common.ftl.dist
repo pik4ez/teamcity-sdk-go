@@ -11,7 +11,9 @@
 
 <#macro build_agent build>
   <#-- @ftlvariable name="build" type="jetbrains.buildServer.serverSide.SBuild" -->
+  <#if !build.agentLessBuild>
   <div>Agent: ${build.agentName?html}</div>
+  </#if>
 </#macro>
 
 <#macro build_comment build>

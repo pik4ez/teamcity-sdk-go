@@ -3,11 +3,12 @@ package teamcity
 import (
 	//"errors"
 	"fmt"
+
 	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) GetBuildConfiguration(buildConfID string) (*types.BuildConfiguration, error) {
-	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s", buildConfID)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes/id:%s", c.version, buildConfID)
 	var buildConfig *types.BuildConfiguration
 
 	err := c.doRetryRequest("GET", path, nil, &buildConfig)

@@ -21,5 +21,5 @@
 <#import "common.ftl" as common>
 
 <#global message>Build failed.
-${project.fullName} :: ${buildType.name} <@common.short_build_info build/>, agent ${agentName} ${var.buildShortStatusDescription}
+${project.fullName} :: ${buildType.name} <@common.short_build_info build/><#if !build.agentLessBuild>, agent ${agentName}</#if> ${var.buildShortStatusDescription}
 ${link.buildResultsLink}</#global>

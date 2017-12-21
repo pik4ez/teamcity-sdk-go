@@ -29,6 +29,9 @@ func main() {
 - [perl5-teamcity-api](http://eilara.github.io/perl5-teamcity-api/)
 
 ## Starting the Docker Container for Testing
+
+1. Change into the `test10` or `test9` depending on which version you are testing
+
 ```bash
 docker-compose up teamcity10
 ```
@@ -38,8 +41,13 @@ docker-compose up teamcity10
 ### Test Data
 When Upgrading from one version of Teamcity to Another the Test Data needs to be upgraded as well.
 
-1. Update the docker-compose.yml and Dockerfile's to the new version of teamcity
-1. 
+1. Change into the `test10` or `test9` depending on which version you are upgrading
+2. Update the docker-compose.yml and Dockerfile's to the new version of teamcity
+3. run `docker-compose pull`
+4. run `docker-compose rm`
+5. `cd ..`
+6. run `docker-compose up teamcity10`
+7. run `docker ps` find container ID
 ```bash
 docker exec -it ${CONTAINER_ID} bash
 cp -r /data/teamcity_server/datadir/config /test-data

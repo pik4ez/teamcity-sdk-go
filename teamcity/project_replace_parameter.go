@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) ReplaceProjectParameter(projectID, name string, parameter *types.Parameter) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/projects/id:%s/parameters/%s", projectID, name)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/projects/id:%s/parameters/%s", c.version, projectID, name)
 	var parameterReturn *types.NamedParameter
 	actual := types.NamedParameter{
 		Name:      name,

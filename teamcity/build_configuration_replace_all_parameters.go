@@ -3,11 +3,12 @@ package teamcity
 import (
 	"errors"
 	"fmt"
+
 	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) ReplaceAllBuildConfigurationParameters(buildConfID string, parameters *types.Parameters) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/parameters", buildConfID)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes/id:%s/parameters", c.version, buildConfID)
 	var parametersReturn *types.Parameters
 
 	err := c.doRetryRequest("PUT", path, parameters, &parametersReturn)

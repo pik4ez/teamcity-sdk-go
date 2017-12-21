@@ -6,7 +6,7 @@ import (
 )
 
 func (c *Client) SetBuildConfigurationTemplate(buildConfID, templateID string) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/template", buildConfID)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes/id:%s/template", c.version, buildConfID)
 
 	if templateID != "" {
 		body := bytes.NewBuffer([]byte("id:" + templateID))

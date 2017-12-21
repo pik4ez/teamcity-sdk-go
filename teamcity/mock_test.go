@@ -11,6 +11,7 @@ func NewTestClient(replyResp *http.Response, err error) *Client {
 		username: "username",
 		password: "password",
 		host:     "host.example.com",
+		version:  "latest",
 		retries:  8,
 	}
 	httpClient := &http.Client{}
