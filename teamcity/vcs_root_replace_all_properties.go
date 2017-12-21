@@ -3,11 +3,12 @@ package teamcity
 import (
 	"errors"
 	"fmt"
+
 	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) ReplaceAllVcsRootProperties(VcsRootId string, properties *types.Properties) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/vcs-roots/id:%s/properties", VcsRootId)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/vcs-roots/id:%s/properties", c.version, VcsRootId)
 	var propertiesReturn *types.Properties
 
 	err := c.doRetryRequest("PUT", path, properties, &propertiesReturn)

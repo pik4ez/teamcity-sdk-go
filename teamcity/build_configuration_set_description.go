@@ -6,7 +6,7 @@ import (
 )
 
 func (c *Client) SetBuildConfigurationDescription(buildConfID, description string) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/description", buildConfID)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes/id:%s/description", c.version, buildConfID)
 
 	body := bytes.NewBuffer([]byte(description))
 	_, err := c.doNotJSONRequest("PUT", path, "text/plain", "text/plain", body)

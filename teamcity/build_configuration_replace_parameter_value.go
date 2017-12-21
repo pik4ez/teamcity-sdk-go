@@ -6,7 +6,7 @@ import (
 )
 
 func (c *Client) ReplaceBuildConfigurationParameterValue(buildConfID, name string, value string) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/parameters/%s", buildConfID, name)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes/id:%s/parameters/%s", c.version, buildConfID, name)
 
 	body := bytes.NewBuffer([]byte(value))
 	_, err := c.doNotJSONRequest("PUT", path, "text/plain", "text/plain", body)

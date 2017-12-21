@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/Cardfree/teamcity-sdk-go/types"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 // Client to access a TeamCity API
@@ -19,22 +20,27 @@ type Client struct {
 	username   string
 	password   string
 	host       string
+	version    string
 	retries    int
 }
 
-func New(host, username, password string) *Client {
+func New(host, username, password string, version string) *Client {
+	if version == "" {
+		version = "latest"
+	}
 	return &Client{
 		HTTPClient: http.DefaultClient,
 		username:   username,
 		password:   password,
 		host:       host,
+		version:    version,
 		retries:    8,
 	}
 }
 
 func (c *Client) Server() (*types.Server, error) {
 	var server *types.Server
-	err := c.doRequest("GET", "/httpAuth/app/rest/server", nil, &server)
+	err := c.doRequest("GET", fmt.Sprintf("/httpAuth/app/rest/%s/server", c.version), nil, &server)
 	return server, err
 }
 
@@ -53,7 +59,7 @@ func (c *Client) QueueBuild(buildTypeID string, branchName string, properties ty
 	build := &types.Build{}
 
 	err := withRetry(c.retries, func() error {
-		return c.doRequest("POST", "/httpAuth/app/rest/buildQueue", jsonQuery, &build)
+		return c.doRequest("POST", fmt.Sprintf("/httpAuth/app/rest/%s/buildQueue", c.version), jsonQuery, &build)
 	})
 	if err != nil {
 		return nil, err
@@ -63,7 +69,7 @@ func (c *Client) QueueBuild(buildTypeID string, branchName string, properties ty
 }
 
 func (c *Client) SearchBuild(locator string) ([]*types.Build, error) {
-	path := fmt.Sprintf("/httpAuth/app/rest/builds/?locator=%s&fields=count,build(*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*)))", locator)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/builds/?locator=%s&fields=count,build(*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*)))", c.version, locator)
 
 	respStruct := struct {
 		Count int
@@ -80,7 +86,7 @@ func (c *Client) SearchBuild(locator string) ([]*types.Build, error) {
 }
 
 func (c *Client) GetBuild(buildID string) (*types.Build, error) {
-	path := fmt.Sprintf("/httpAuth/app/rest/builds/id:%s?fields=*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*))", buildID)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/builds/id:%s?fields=*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*))", c.version, buildID)
 	var build *types.Build
 
 	err := withRetry(c.retries, func() error {
@@ -106,7 +112,7 @@ func (c *Client) GetBuildID(buildTypeID, branchName, buildNumber string) (string
 		Build    []types.Build
 	}
 
-	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/builds?locator=branch:%s,number:%s,count:1", buildTypeID, branchName, buildNumber)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes/id:%s/builds?locator=branch:%s,number:%s,count:1", c.version, buildTypeID, branchName, buildNumber)
 
 	var build *builds
 	err := withRetry(c.retries, func() error {
@@ -124,7 +130,7 @@ func (c *Client) GetBuildID(buildTypeID, branchName, buildNumber string) (string
 }
 
 func (c *Client) GetBuildProperties(buildID string) (types.Properties, error) {
-	path := fmt.Sprintf("/httpAuth/app/rest/builds/id:%s/resulting-properties", buildID)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/builds/id:%s/resulting-properties", c.version, buildID)
 
 	var response types.Properties
 

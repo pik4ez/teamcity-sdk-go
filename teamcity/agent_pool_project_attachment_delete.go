@@ -5,6 +5,6 @@ import (
 )
 
 func (c *Client) DeleteAgentPoolProjectAttachement(pool int, project string) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/agentPools/id:%d/projects/%s", pool, project)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/agentPools/id:%d/projects/%s", c.version, pool, project)
 	return c.doRetryRequest("DELETE", path, nil, nil)
 }

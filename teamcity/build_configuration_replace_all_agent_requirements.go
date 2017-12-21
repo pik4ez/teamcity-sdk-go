@@ -3,11 +3,12 @@ package teamcity
 import (
 	"errors"
 	"fmt"
+
 	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) ReplaceAllBuildConfigurationAgentRequirements(buildConfID string, agentRequirements *types.BuildAgentRequirements) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/agent-requirements", buildConfID)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes/id:%s/agent-requirements", c.version, buildConfID)
 	var buildAgentRequirementsReturn *types.BuildAgentRequirements
 
 	err := c.doRetryRequest("PUT", path, agentRequirements, &buildAgentRequirementsReturn)

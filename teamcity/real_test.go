@@ -3,15 +3,16 @@ package teamcity
 import (
 	"flag"
 	"fmt"
-	"github.com/Cardfree/teamcity-sdk-go/types"
 	"testing"
 	"time"
+
+	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 var host = flag.String("host", "localhost", "hostname to test against")
 
 func (c *Client) WaitForReady() error {
-	path := fmt.Sprintf("/httpAuth/app/rest/projects")
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/projects", c.version)
 	var projects struct {
 		Count    int
 		Href     string
@@ -62,7 +63,7 @@ func (c *Client) VersionParameterValue(t *testing.T, parameter string) string {
 
 func NewRealTestClient(t *testing.T) (*Client, error) {
 	IsRealTestSkip(t)
-	client := New(fmt.Sprintf("http://%s:8112", *host), "admin", "admin")
+	client := New(fmt.Sprintf("http://%s:8112", *host), "admin", "admin", "latest")
 	err := client.WaitForReady()
 	if err != nil {
 		return nil, err

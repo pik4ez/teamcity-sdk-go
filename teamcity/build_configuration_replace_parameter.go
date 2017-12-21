@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/Cardfree/teamcity-sdk-go/types"
 )
 
 func (c *Client) ReplaceBuildConfigurationParameter(buildConfID, name string, parameter *types.Parameter) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/buildTypes/id:%s/parameters/%s", buildConfID, name)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes/id:%s/parameters/%s", c.version, buildConfID, name)
 	var parameterReturn *types.NamedParameter
 	actual := types.NamedParameter{
 		Name:      name,

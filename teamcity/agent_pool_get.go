@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) GetAgentPoolById(pool int) (*types.AgentPools, error) {
-	path := fmt.Sprintf("/httpAuth/app/rest/agentPools/id:%d", pool)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/agentPools/id:%d", c.version, pool)
 	var agp *types.AgentPools
 
 	err := c.doRetryRequest("GET", path, nil, &agp)
@@ -19,7 +19,7 @@ func (c *Client) GetAgentPoolById(pool int) (*types.AgentPools, error) {
 }
 
 func (c *Client) GetAgentPoolByName(pool string) (*types.AgentPools, error) {
-	path := fmt.Sprintf("/httpAuth/app/rest/agentPools/name:%s", pool)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/agentPools/name:%s", c.version, pool)
 	var agp *types.AgentPools
 
 	err := c.doRetryRequest("GET", path, nil, &agp)
