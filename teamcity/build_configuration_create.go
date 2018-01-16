@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) CreateBuildConfiguration(buildConfig *types.BuildConfiguration) error {
-	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildType", c.version)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/buildTypes", c.version)
 	var buildConfigReturn *types.BuildConfiguration
 
 	err := c.doRetryRequest("POST", path, buildConfig, &buildConfigReturn)
