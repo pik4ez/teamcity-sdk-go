@@ -312,14 +312,26 @@ func truncate(s string, l int) string {
 	return s
 }
 
+// maybeTemporary distinguishes errors that could be temporary and could be
+// retried from those that should not be retried.
+type maybeTemporary interface {
+	// Temporary returns true if the error could be temporary and it's therefore
+	// reasonable to re-try. The net package implements this method on all its
+	// errors.
+	Temporary() bool
+}
+
 func withRetry(retries int, f func() error) (err error) {
 	for i := 0; i < retries; i++ {
-		err = f()
-		if err != nil {
+		if err = f(); err != nil {
+			tempErr, ok := err.(maybeTemporary)
+			if !ok || !tempErr.Temporary() {
+				return err // not temporary, do not retry.
+			}
 			log.Printf("Retry: %v / %v, error: %v\n", i, retries, err)
-		} else {
-			return
+			continue
 		}
+		return nil
 	}
-	return
+	return err
 }
