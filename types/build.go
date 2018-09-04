@@ -60,6 +60,8 @@ type Build struct {
 
 	Tags tagsInput `json:"tags,omitempty"`
 
+	RunningInfo RunningInfo `json:"running-info,omitempty"`
+
 	Properties Properties `json:"properties"`
 }
 
@@ -71,6 +73,15 @@ type tagInput struct {
 
 type tagsInput struct {
 	Tag []tagInput `json:"tag"`
+}
+
+type RunningInfo struct {
+	PercentageComplete    int    `json:"percentageComplete"`
+	ElapsedSeconds        int    `json:"elapsedSeconds"`
+	EstimatedTotalSeconds int    `json:"estimatedTotalSeconds"`
+	CurrentStageText      string `json:"currentStageText"`
+	Outdated              bool   `json:"outdated"`
+	ProbablyHanging       bool   `json:"probablyHanging"`
 }
 
 func (tags Tags) MarshalJSON() ([]byte, error) {
