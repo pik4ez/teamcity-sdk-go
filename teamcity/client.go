@@ -86,7 +86,7 @@ func (c *Client) SearchBuild(locator string) ([]*types.Build, error) {
 }
 
 func (c *Client) GetBuild(buildID string) (*types.Build, error) {
-	path := fmt.Sprintf("/httpAuth/app/rest/%s/builds/id:%s?fields=*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*))", c.version, buildID)
+	path := fmt.Sprintf("/httpAuth/app/rest/%s/builds/id:%s?fields=*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*)),artifact-dependencies(*,artifact-dependencies(*)),snapshot-dependencies(*,snapshot-dependencies(*))", c.version, buildID)
 	var build *types.Build
 
 	err := withRetry(c.retries, func() error {
