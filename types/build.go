@@ -9,7 +9,7 @@ import (
 type Build struct {
 	ID          int64
 	BuildTypeID string
-	BuildType   struct {
+	BuildType struct {
 		ID          string
 		Name        string
 		Description string
@@ -43,7 +43,7 @@ type Build struct {
 	DefaultBranch bool
 	HREF          string
 	WebURL        string
-	Agent         struct {
+	Agent struct {
 		ID     int64
 		Name   string
 		TypeID int64
@@ -60,7 +60,12 @@ type Build struct {
 
 	Tags tagsInput `json:"tags,omitempty"`
 
+	RunningInfo RunningInfo `json:"running-info,omitempty"`
+
 	Properties Properties `json:"properties"`
+
+	ArtifactDependencies Dependencies `json:"artifact-dependencies,omitempty"`
+	SnapshotDependencies Dependencies `json:"snapshot-dependencies,omitempty"`
 }
 
 type Tags []string
@@ -100,6 +105,47 @@ func (tags *Tags) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type RunningInfo struct {
+	PercentageComplete    int    `json:"percentageComplete"`
+	ElapsedSeconds        int    `json:"elapsedSeconds"`
+	EstimatedTotalSeconds int    `json:"estimatedTotalSeconds"`
+	CurrentStageText      string `json:"currentStageText"`
+	Outdated              bool   `json:"outdated"`
+	ProbablyHanging       bool   `json:"probablyHanging"`
+}
+
+type Dependencies []Dependency
+
+type Dependency struct {
+	ID          int    `json:"id"`
+	BuildTypeID string `json:"buildTypeID"`
+	Number      string `json:"number"`
+	Status      string `json:"status"`
+	State       string `json:"state"`
+	BranchName  string `json:"branchName"`
+	HREF        string `json:"href"`
+	WebURL      string `json:"webUrl"`
+}
+
+func (dependencies *Dependencies) UnmarshalJSON(b []byte) error {
+	var depInput struct {
+		Count int          `json:"count,omitempty"`
+		Build []Dependency `json:"build,omitempty"`
+	}
+
+	if err := json.Unmarshal(b, &depInput); err != nil {
+		return err
+	}
+
+	if depInput.Count != 0 {
+		*dependencies = Dependencies(depInput.Build)
+	} else {
+		*dependencies = make(Dependencies, 0)
+	}
+
+	return nil
+}
+
 func (b *Build) String() string {
 	return fmt.Sprintf("Build %d, %#v state=%s", b.ID, b.ComputedState(), b.State)
 }
@@ -107,7 +153,7 @@ func (b *Build) String() string {
 type State int
 
 const (
-	Unknown = State(iota)
+	Unknown  = State(iota)
 	Queued
 	Started
 	Finished
