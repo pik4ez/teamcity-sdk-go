@@ -247,15 +247,14 @@ func (c *Client) doRequest(method string, path string, data interface{}, v inter
 	if err != nil {
 		return err
 	}
-	if jsonCnt == nil {
-		return nil
+	
+	if v == nil {
+		return fmt.Errorf("cannot write json to nil")
 	}
 
-	if v != nil {
-		err = json.Unmarshal(jsonCnt, &v)
-		if err != nil {
-			return fmt.Errorf("json unmarshal: %s (%q)", err, truncate(string(jsonCnt), 1000))
-		}
+	err = json.Unmarshal(jsonCnt, &v)
+	if err != nil {
+		return fmt.Errorf("json unmarshal: %s (%q)", err, truncate(string(jsonCnt), 1000))
 	}
 
 	return nil
@@ -290,9 +289,6 @@ func (c *Client) doNotJSONRequest(method string, path string, accept string, mim
 		return nil, err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode == 404 {
-		return nil, nil
-	}
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -300,6 +296,8 @@ func (c *Client) doNotJSONRequest(method string, path string, accept string, mim
 	}
 	if resp.StatusCode >= 400 && resp.Header["Content-Type"][0] == "text/plain" {
 		return nil, errors.New(string(respBody))
+	} else if resp.StatusCode >= 400 {
+		return nil, fmt.Errorf("teamcity return HTTP error: %d %s", resp.StatusCode, resp.Status)
 	}
 
 	return respBody, err
